@@ -1,4 +1,5 @@
 {
     "jest.jestCommandLine": "npx jest",
-    "typescript.tsdk": "./townService/node_modules/typescript/lib"
+    "typescript.tsdk": "./townService/node_modules/typescript/lib",
+    "editor.tabSize": 2
 }
