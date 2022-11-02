@@ -18,15 +18,11 @@ export default class StreamingArea extends InteractableArea {
    * Creates a new StreamingArea
    *
    * @param streamingArea model containing this area's starting state
-   * @param coordinates the bounding box that defines this Streaming area
-   * @param townEmitter a broadcast emitter that can be used to emit updates to players
+   * @param coords the bounding box that defines this Streaming area
+   * @param emit a broadcast emitter that can be used to emit updates to players
    */
-  public constructor(
-    { id, stream }: StreamingAreaModel,
-    coordinates: BoundingBox,
-    townEmitter: TownEmitter,
-  ) {
-    super(id, coordinates, townEmitter);
+  public constructor({ id, stream }: StreamingAreaModel, coords: BoundingBox, emit: TownEmitter) {
+    super(id, coords, emit);
     this._stream = stream;
   }
 
@@ -39,7 +35,11 @@ export default class StreamingArea extends InteractableArea {
    * @param player
    */
   public remove(player: Player): void {
-    // todo
+    super.remove(player);
+    if (this._occupants.length === 0) {
+      this._stream = undefined;
+      this._emitAreaChanged();
+    }
   }
 
   /**
@@ -48,7 +48,7 @@ export default class StreamingArea extends InteractableArea {
    * @param streamingArea updated model
    */
   public updateModel({ stream }: StreamingAreaModel) {
-    // todo
+    this._stream = stream;
   }
 
   /**
@@ -57,7 +57,8 @@ export default class StreamingArea extends InteractableArea {
    */
   public toModel(): StreamingAreaModel {
     return {
-      // todo
+      id: this.id,
+      stream: this.stream,
     };
   }
 
@@ -68,6 +69,11 @@ export default class StreamingArea extends InteractableArea {
    * @returns
    */
   public static fromMapObject(mapObject: ITiledMapObject, townEmitter: TownEmitter): StreamingArea {
-    // todo
+    const { name, width, height } = mapObject;
+    if (!width || !height) {
+      throw new Error(`Malformed viewing area ${name}`);
+    }
+    const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
+    return new StreamingArea({ id: name }, rect, townEmitter);
   }
 }
