@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import TypedEventEmitter from 'typed-emitter';
+import { StreamingArea as StreamingAreaModel } from '../types/CoveyTownSocket';
 
 export type StreamingAreaEvents = {
   /**
@@ -29,7 +30,7 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * it will always be tied to the same id.
    */
   public get id() {
-    // Todo
+    return this._model.id;
   }
 
   /**
@@ -37,7 +38,7 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * Or undefined if there is no channel set.
    */
   public get stream() {
-    // Todo
+    return this._model.stream;
   }
 
   /**
@@ -47,14 +48,17 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * Changing this value will emit a 'streamChange' event to listeners.
    */
   public set stream(stream: string | undefined) {
-    // todo
+    if (this._model.stream !== stream) {
+      this._model.stream = stream;
+      this.emit('streamChange', stream);
+    }
   }
 
   /**
    * @returns the StreamingAreaModel whose state is represented by this controller.
    */
   public streamingAreaModel(): StreamingAreaModel {
-    // todo
+    return this._model;
   }
 
   /**
@@ -63,6 +67,6 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * @param updatedModel the updated model to update this controller with
    */
   public updateFrom(updatedModel: StreamingAreaModel) {
-    // todo
+    this.stream = updatedModel.stream;
   }
 }
