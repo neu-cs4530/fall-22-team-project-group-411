@@ -183,6 +183,10 @@ export async function mockTownControllerConnection(
         elapsedTimeSec: 0,
         isPlaying: false,
       });
+      responseToSendController.interactables.push({
+        id: nanoid(),
+        stream: nanoid(),
+      });
     }
   }
   mockSocket.on.mockImplementationOnce((eventName, eventListener) => {

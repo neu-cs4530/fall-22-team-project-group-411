@@ -548,16 +548,10 @@
                  "y":868.333333333333
                 }, 
                 {
-                 "type":"ViewingArea",
+                 "type":"StreamingArea",
                  "height":150.833333333333,
                  "id":37,
                  "name":"Basement TV",
-                 "properties":[
-                        {
-                         "name":"video",
-                         "type":"string",
-                         "value":"https:\/\/www.youtube.com\/watch?v=GEgheE1rdXo"
-                        }],
                  "rotation":0,
                  "visible":true,
                  "width":158.333333333333,

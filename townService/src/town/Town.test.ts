@@ -17,6 +17,7 @@ import {
   PlayerLocation,
   TownEmitter,
   ViewingArea as ViewingAreaModel,
+  StreamingArea as StreamingAreaModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import Town from './Town';
@@ -264,6 +265,66 @@ const testingMaps: TestMapDict = {
       },
     ],
   },
+  oneConvOneViewingOneStreaming: {
+    tiledversion: '1.9.0',
+    tileheight: 32,
+    tilesets: [],
+    tilewidth: 32,
+    type: 'map',
+    layers: [
+      {
+        id: 4,
+        name: 'Objects',
+        objects: [
+          {
+            type: 'ConversationArea',
+            height: 237,
+            id: 39,
+            name: 'Name1',
+            rotation: 0,
+            visible: true,
+            width: 326,
+            x: 40,
+            y: 120,
+          },
+          {
+            type: 'StreamingArea',
+            height: 266,
+            id: 43,
+            name: 'Name2',
+            rotation: 0,
+            visible: true,
+            width: 467,
+            x: 612,
+            y: 120,
+          },
+          {
+            type: 'ViewingArea',
+            height: 237,
+            id: 54,
+            name: 'Name3',
+            properties: [
+              {
+                name: 'video',
+                type: 'string',
+                value: 'someURL',
+              },
+            ],
+            rotation: 0,
+            visible: true,
+            width: 326,
+            x: 155,
+            y: 566,
+          },
+        ],
+        opacity: 1,
+        type: 'objectgroup',
+        visible: true,
+        x: 0,
+        y: 0,
+      },
+    ],
+  },
   twoConvTwoViewing: {
     tiledversion: '1.9.0',
     tileheight: 32,
@@ -398,6 +459,9 @@ describe('Town', () => {
       it('Should not throw an error for any interactable area that is not a viewing area', () => {
         expect(() =>
           interactableUpdateHandler({ id: 'Name1', topic: nanoid(), occupantsByID: [] }),
+        ).not.toThrowError();
+        expect(() =>
+          interactableUpdateHandler({ id: 'Name2', stream: nanoid() }),
         ).not.toThrowError();
       });
       it('Should not throw an error if there is no such viewing area', () => {
@@ -681,6 +745,46 @@ describe('Town', () => {
       it('Should include any players in that area as occupants', () => {
         const viewingArea = town.getInteractable('Name3');
         expect(viewingArea.occupantsByID).toEqual([player.id]);
+      });
+    });
+  });
+  describe('addStreamingArea', () => {
+    beforeEach(async () => {
+      town.initializeFromMap(testingMaps.oneConvOneViewingOneStreaming);
+    });
+    it('Should return false if no area exists with that ID', () => {
+      expect(town.addStreamingArea({ id: nanoid(), stream: nanoid() })).toBe(false);
+    });
+    it('Should return false if the requested stream is empty', () => {
+      expect(town.addStreamingArea({ id: 'Name2', stream: '' })).toBe(false);
+      expect(town.addStreamingArea({ id: 'Name2', stream: undefined })).toBe(false);
+    });
+    it('Should return false if the area is already active', () => {
+      expect(town.addStreamingArea({ id: 'Name2', stream: 'test' })).toBe(true);
+      expect(town.addStreamingArea({ id: 'Name2', stream: 'test2' })).toBe(false);
+    });
+    describe('When successful', () => {
+      const newModel: StreamingAreaModel = {
+        id: 'Name2',
+        stream: nanoid(),
+      };
+      beforeEach(() => {
+        playerTestData.moveTo(613, 121); // Inside of "Name2" area
+        expect(town.addStreamingArea(newModel)).toBe(true);
+      });
+
+      it('Should update the local model for that area', () => {
+        const streamingArea = town.getInteractable('Name2');
+        expect(streamingArea.toModel()).toEqual(newModel);
+      });
+
+      it('Should emit an interactableUpdate message', () => {
+        const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
+        expect(lastEmittedUpdate).toEqual(newModel);
+      });
+      it('Should include any players in that area as occupants', () => {
+        const streamingArea = town.getInteractable('Name2');
+        expect(streamingArea.occupantsByID).toEqual([player.id]);
       });
     });
   });

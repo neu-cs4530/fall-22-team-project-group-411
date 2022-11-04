@@ -2,7 +2,13 @@ import assert from 'assert';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import { Town } from '../api/Model';
-import { ConversationArea, Interactable, TownEmitter, ViewingArea } from '../types/CoveyTownSocket';
+import {
+  ConversationArea,
+  Interactable,
+  TownEmitter,
+  ViewingArea,
+  StreamingArea,
+} from '../types/CoveyTownSocket';
 import TownsStore from '../lib/TownsStore';
 import {
   createConversationForTesting,
@@ -11,6 +17,7 @@ import {
   mockPlayer,
   isViewingArea,
   isConversationArea,
+  isStreamingArea,
   MockedPlayer,
 } from '../TestUtils';
 import { TownsController } from './TownsController';
@@ -353,6 +360,57 @@ describe('TownsController integration tests', () => {
         viewingArea.id = nanoid();
         await expect(
           controller.createViewingArea(testingTown.townID, sessionToken, viewingArea),
+        ).rejects.toThrow();
+      });
+    });
+
+    describe('Create Streaming Area', () => {
+      it('Executes without error when creating a new streaming area', async () => {
+        const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
+        if (!streamingArea) {
+          fail('Expected at least one streaming area to be returned in the initial join data');
+        } else {
+          const newStreamingArea: StreamingArea = {
+            id: streamingArea.id,
+            stream: nanoid(),
+          };
+          await controller.createStreamingArea(testingTown.townID, sessionToken, newStreamingArea);
+          // Check to see that the viewing area was successfully updated
+          const townEmitter = getBroadcastEmitterForTownID(testingTown.townID);
+          const updateMessage = getLastEmittedEvent(townEmitter, 'interactableUpdate');
+          if (isStreamingArea(updateMessage)) {
+            expect(updateMessage).toEqual(newStreamingArea);
+          } else {
+            fail('Expected an interactableUpdate to be dispatched with the new streaming area');
+          }
+        }
+      });
+      it('Returns an error message if the town ID is invalid', async () => {
+        const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
+        const newStreamingArea: StreamingArea = {
+          id: streamingArea.id,
+          stream: nanoid(),
+        };
+        await expect(
+          controller.createStreamingArea(nanoid(), sessionToken, newStreamingArea),
+        ).rejects.toThrow();
+      });
+      it('Checks for a valid session token before creating a streaming area', async () => {
+        const invalidSessionToken = nanoid();
+        const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
+        const newStreamingArea: StreamingArea = {
+          id: streamingArea.id,
+          stream: nanoid(),
+        };
+        await expect(
+          controller.createStreamingArea(testingTown.townID, invalidSessionToken, newStreamingArea),
+        ).rejects.toThrow();
+      });
+      it('Returns an error message if addStreamingArea returns false', async () => {
+        const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
+        streamingArea.id = nanoid();
+        await expect(
+          controller.createStreamingArea(testingTown.townID, sessionToken, streamingArea),
         ).rejects.toThrow();
       });
     });
