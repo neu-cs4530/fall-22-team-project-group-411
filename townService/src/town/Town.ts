@@ -300,7 +300,7 @@ export default class Town {
    *
    * @returns True if the streaming area was created or false if there is no known
    * streaming area with the specified ID or if there is already an active streaming area
-   * with the specified ID or if there is no video URL specified
+   * with the specified ID or if there is no stream specified
    */
   public addStreamingArea(streamingArea: StreamingAreaModel): boolean {
     const area = this._interactables.find(
@@ -384,7 +384,16 @@ export default class Town {
         ConversationArea.fromMapObject(eachConvAreaObj, this._broadcastEmitter),
       );
 
-    this._interactables = this._interactables.concat(viewingAreas).concat(conversationAreas);
+    const streamingAreas = objectLayer.objects
+      .filter(eachObject => eachObject.type === 'StreamingArea')
+      .map(eachStreamAreaObj =>
+        StreamingArea.fromMapObject(eachStreamAreaObj, this._broadcastEmitter),
+      );
+
+    this._interactables = this._interactables
+      .concat(viewingAreas)
+      .concat(conversationAreas)
+      .concat(streamingAreas);
     this._validateInteractables();
   }
 
