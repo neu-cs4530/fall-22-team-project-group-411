@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
 import Interactable from '../components/Town/Interactable';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
+import StreamingArea from '../components/Town/interactables/StreamingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
 import { TownsService, TownsServiceClient } from '../generated/client';
 import useTownController from '../hooks/useTownController';
@@ -13,7 +14,7 @@ import {
   ChatMessage,
   CoveyTownSocket,
   PlayerLocation,
-  StreamingArea,
+  StreamingArea as StreamingAreaModel,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
@@ -429,7 +430,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * a conversationAreasChagned event to listeners of this TownController.
      *
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
-     * events (@see ViewingAreaController and @see ConversationAreaController)
+     * events (@see ViewingAreaController and @see ConversationAreaController and @see StreamingAreaController)
      */
     this._socket.on('interactableUpdate', interactable => {
       if (isConversationArea(interactable)) {
@@ -541,8 +542,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    *
    * @param newArea
    */
-  async createStreamingArea(newArea: StreamingArea) {
-    await this._townsService.createStreamingArea();
+  async createStreamingArea(newArea: StreamingAreaModel) {
+    await this._townsService.createStreamingArea(this.townID, this.sessionToken, newArea);
   }
 
   /**
@@ -577,6 +578,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
         this._conversationAreas = [];
         this._viewingAreas = [];
+        this._streamingAreas = [];
         initialData.interactables.forEach(eachInteractable => {
           if (isConversationArea(eachInteractable)) {
             this._conversationAreasInternal.push(
@@ -587,6 +589,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
             );
           } else if (isViewingArea(eachInteractable)) {
             this._viewingAreas.push(new ViewingAreaController(eachInteractable));
+          } else if (isStreamingArea(eachInteractable)) {
+            this._streamingAreas.push(new StreamingAreaController(eachInteractable));
           }
         });
         this._userID = initialData.userID;
@@ -598,6 +602,28 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         reject(new Error('Invalid town ID'));
       });
     });
+  }
+
+  /**
+   * Retrieve the streaming area controller that corresponds to a streamingAreaModel, creating one if necessary
+   *
+   * @param streamingArea
+   * @returns
+   */
+  public getStreamingAreaController(streamingArea: StreamingArea): StreamingAreaController {
+    const existingController = this._streamingAreas.find(
+      eachExistingArea => eachExistingArea.id === streamingArea.id,
+    );
+    if (existingController) {
+      return existingController;
+    } else {
+      const newController = new StreamingAreaController({
+        id: streamingArea.id,
+        stream: streamingArea.defaultStream,
+      });
+      this._streamingAreas.push(newController);
+      return newController;
+    }
   }
 
   /**
@@ -631,6 +657,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    */
   public emitViewingAreaUpdate(viewingArea: ViewingAreaController) {
     this._socket.emit('interactableUpdate', viewingArea.viewingAreaModel());
+  }
+
+  /**
+   * Emit a streaming area update to the townService
+   * @param streamingArea The Streaming Area Controller that is updated and should be emitted
+   *    with the event
+   */
+  public emitStreamingAreaUpdate(streamingArea: StreamingAreaController) {
+    this._socket.emit('interactableUpdate', streamingArea.streamingAreaModel());
   }
 
   /**
