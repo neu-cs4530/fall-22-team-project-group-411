@@ -1,23 +1,16 @@
 import React, { createContext, ReactNode, useCallback, useState } from 'react';
-import {
-  ConnectOptions,
-  CreateLocalTrackOptions,
-  LocalAudioTrack,
-  LocalVideoTrack,
-  Room,
-} from 'twilio-video';
+import { CreateLocalTrackOptions, ConnectOptions, LocalAudioTrack, LocalVideoTrack, Room } from 'twilio-video';
 import { Callback, ErrorCallback } from '../../types';
+import { SelectedParticipantProvider } from './useSelectedParticipant/useSelectedParticipant';
+
 import AttachVisibilityHandler from './AttachVisibilityHandler/AttachVisibilityHandler';
-import useBackgroundSettings, {
-  BackgroundSettings,
-} from './useBackgroundSettings/useBackgroundSettings';
+import useBackgroundSettings, { BackgroundSettings } from './useBackgroundSettings/useBackgroundSettings';
 import useHandleRoomDisconnection from './useHandleRoomDisconnection/useHandleRoomDisconnection';
 import useHandleTrackPublicationFailed from './useHandleTrackPublicationFailed/useHandleTrackPublicationFailed';
 import useLocalTracks from './useLocalTracks/useLocalTracks';
 import useRestartAudioTrackOnDeviceChange from './useRestartAudioTrackOnDeviceChange/useRestartAudioTrackOnDeviceChange';
 import useRoom from './useRoom/useRoom';
 import useScreenShareToggle from './useScreenShareToggle/useScreenShareToggle';
-import { SelectedParticipantProvider } from './useSelectedParticipant/useSelectedParticipant';
 
 /*
  *  The hooks used by the VideoProvider component are different than the hooks found in the 'hooks/' directory. The hooks
@@ -55,18 +48,13 @@ interface VideoProviderProps {
   children: ReactNode;
 }
 
-export function VideoProvider({
-  options,
-  children,
-  onError = () => {},
-  onDisconnect = () => {},
-}: VideoProviderProps) {
+export function VideoProvider({ options, children, onError = () => {}, onDisconnect=()=>{} }: VideoProviderProps) {
   const onErrorCallback: ErrorCallback = useCallback(
     error => {
       console.log(`ERROR: ${error.message}`, error);
       onError(error);
     },
-    [onError],
+    [onError]
   );
 
   const {
@@ -90,15 +78,15 @@ export function VideoProvider({
     removeLocalVideoTrack,
     isSharingScreen,
     toggleScreenShare,
-    onDisconnect,
+    onDisconnect
   );
   useHandleTrackPublicationFailed(room, onError);
   useRestartAudioTrackOnDeviceChange(localTracks);
 
   const [isBackgroundSelectionOpen, setIsBackgroundSelectionOpen] = useState(false);
-  const videoTrack = localTracks.find(
-    track => !track.name.includes('screen') && track.kind === 'video',
-  ) as LocalVideoTrack | undefined;
+  const videoTrack = localTracks.find(track => !track.name.includes('screen') && track.kind === 'video') as
+    | LocalVideoTrack
+    | undefined;
   const [backgroundSettings, setBackgroundSettings] = useBackgroundSettings(videoTrack, room);
 
   return (
@@ -121,7 +109,8 @@ export function VideoProvider({
         setIsBackgroundSelectionOpen,
         backgroundSettings,
         setBackgroundSettings,
-      }}>
+      }}
+    >
       <SelectedParticipantProvider room={room}>{children}</SelectedParticipantProvider>
       {/* 
         The AttachVisibilityHandler component is using the useLocalVideoToggle hook

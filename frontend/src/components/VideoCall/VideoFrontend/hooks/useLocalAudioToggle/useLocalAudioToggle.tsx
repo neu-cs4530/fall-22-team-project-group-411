@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import { LocalAudioTrack } from 'twilio-video';
+import { useCallback } from 'react';
 import useIsTrackEnabled from '../useIsTrackEnabled/useIsTrackEnabled';
 import useVideoContext from '../useVideoContext/useVideoContext';
 

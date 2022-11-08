@@ -1,42 +1,38 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
 import React from 'react';
-import {
-  LocalAudioTrack,
-  LocalVideoTrack,
-  Participant,
-  RemoteAudioTrack,
-  RemoteVideoTrack,
-} from 'twilio-video';
-import { UserProfile } from '../../../../../CoveyTypes';
-import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackSwitchedOff';
-import useParticipantIsReconnecting from '../../hooks/useParticipantIsReconnecting/useParticipantIsReconnecting';
-import usePublications from '../../hooks/usePublications/usePublications';
-import useTrack from '../../hooks/useTrack/useTrack';
-import AvatarIcon from '../../icons/AvatarIcon';
-import ScreenShareIcon from '../../icons/ScreenShareIcon';
+import clsx from 'clsx';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { LocalAudioTrack, LocalVideoTrack, Participant, RemoteAudioTrack, RemoteVideoTrack } from 'twilio-video';
+
 import AudioLevelIndicator from '../AudioLevelIndicator/AudioLevelIndicator';
+import AvatarIcon from '../../icons/AvatarIcon';
 import NetworkQualityLevel from '../NetworkQualityLevel/NetworkQualityLevel';
 import PinIcon from './PinIcon/PinIcon';
+import ScreenShareIcon from '../../icons/ScreenShareIcon';
+import Typography from '@material-ui/core/Typography';
+
+import useIsTrackSwitchedOff from '../../hooks/useIsTrackSwitchedOff/useIsTrackSwitchedOff';
+import usePublications from '../../hooks/usePublications/usePublications';
+import useTrack from '../../hooks/useTrack/useTrack';
+import useParticipantIsReconnecting from '../../hooks/useParticipantIsReconnecting/useParticipantIsReconnecting';
+import { UserProfile } from '../../../../../CoveyTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      'position': 'relative',
-      'display': 'flex',
-      'alignItems': 'center',
-      'height': 0,
-      'overflow': 'hidden',
-      'marginBottom': '0.5em',
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      height: 0,
+      overflow: 'hidden',
+      marginBottom: '0.5em',
       '& video': {
         filter: 'none',
         objectFit: 'contain !important',
       },
-      'borderRadius': '4px',
-      'border': `${theme.participantBorderWidth}px solid rgb(245, 248, 255)`,
-      'paddingTop': `calc(${(9 / 16) * 100}% - ${theme.participantBorderWidth}px)`,
-      'background': 'black',
+      borderRadius: '4px',
+      border: `${theme.participantBorderWidth}px solid rgb(245, 248, 255)`,
+      paddingTop: `calc(${(9 / 16) * 100}% - ${theme.participantBorderWidth}px)`,
+      background: 'black',
     },
     innerContainer: {
       position: 'absolute',
@@ -86,10 +82,10 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: 1,
     },
     screenShareIconContainer: {
-      'background': 'rgba(0, 0, 0, 0.5)',
-      'padding': '0.18em 0.3em',
-      'marginRight': '0.3em',
-      'display': 'flex',
+      background: 'rgba(0, 0, 0, 0.5)',
+      padding: '0.18em 0.3em',
+      marginRight: '0.3em',
+      display: 'flex',
       '& path': {
         fill: 'white',
       },
@@ -121,7 +117,7 @@ const useStyles = makeStyles((theme: Theme) =>
     cursorPointer: {
       cursor: 'pointer',
     },
-  }),
+  })
 );
 
 interface ParticipantInfoProps {
@@ -150,17 +146,13 @@ export default function ParticipantInfo({
   const publications = usePublications(participant);
 
   const audioPublication = publications.find(p => p.kind === 'audio');
-  const videoPublication = publications.find(
-    p => !p.trackName.includes('screen') && p.kind === 'video',
-  );
+  const videoPublication = publications.find(p => !p.trackName.includes('screen') && p.kind === 'video');
 
   const isVideoEnabled = Boolean(videoPublication);
   const isScreenShareEnabled = publications.find(p => p.trackName.includes('screen'));
 
   const videoTrack = useTrack(videoPublication);
-  const isVideoSwitchedOff = useIsTrackSwitchedOff(
-    videoTrack as LocalVideoTrack | RemoteVideoTrack,
-  );
+  const isVideoSwitchedOff = useIsTrackSwitchedOff(videoTrack as LocalVideoTrack | RemoteVideoTrack);
 
   const audioTrack = useTrack(audioPublication) as LocalAudioTrack | RemoteAudioTrack | undefined;
   const isParticipantReconnecting = useParticipantIsReconnecting(participant);
@@ -169,16 +161,15 @@ export default function ParticipantInfo({
 
   return (
     <div
-      className={clsx(
-        classes.container,
-        {
-          [classes.hideParticipant]: hideParticipant,
-          [classes.cursorPointer]: Boolean(onClick),
-        },
-        slot !== undefined ? `area-${slot}` : undefined,
+      className={clsx(classes.container, {
+        [classes.hideParticipant]: hideParticipant,
+        [classes.cursorPointer]: Boolean(onClick),
+      },
+      slot !== undefined ? `area-${slot}` : undefined,
       )}
       onClick={onClick}
-      data-cy-participant={participant.identity}>
+      data-cy-participant={participant.identity}
+    >
       <div className={classes.infoContainer}>
         <NetworkQualityLevel participant={participant} />
         <div className={classes.infoRowBottom}>
@@ -189,7 +180,7 @@ export default function ParticipantInfo({
           )}
           <span className={classes.identity}>
             <AudioLevelIndicator audioTrack={audioTrack} />
-            <Typography variant='body1' className={classes.typeography} component='span'>
+            <Typography variant="body1" className={classes.typeography} component="span">
               {profile ? profile.displayName : ''}
               {isLocalParticipant && ' (You)'}
             </Typography>
@@ -205,7 +196,7 @@ export default function ParticipantInfo({
         )}
         {isParticipantReconnecting && (
           <div className={classes.reconnectingContainer}>
-            <Typography variant='body1' className={classes.typeography}>
+            <Typography variant="body1" className={classes.typeography}>
               Reconnecting...
             </Typography>
           </div>

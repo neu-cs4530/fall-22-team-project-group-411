@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LocalVideoTrack, RemoteVideoTrack } from 'twilio-video';
 
 type TrackType = RemoteVideoTrack | LocalVideoTrack | undefined | null;

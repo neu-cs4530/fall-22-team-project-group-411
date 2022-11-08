@@ -1,8 +1,9 @@
 import React from 'react';
-import { Participant as IParticipant } from 'twilio-video';
-import { UserProfile } from '../../../../../CoveyTypes';
 import ParticipantInfo from '../ParticipantInfo/ParticipantInfo';
 import ParticipantTracks from '../ParticipantTracks/ParticipantTracks';
+import { Participant as IParticipant } from 'twilio-video';
+import { UserProfile } from '../../../../../CoveyTypes';
+import { Container } from '@chakra-ui/react';
 
 interface ParticipantProps {
   participant: IParticipant;
@@ -30,7 +31,7 @@ export default function Participant({
   insideGrid,
 }: ParticipantProps) {
   return (
-    <div className='participant-wrapper'>
+    <div className="participant-wrapper">
       <ParticipantInfo
         participant={participant}
         profile={profile}

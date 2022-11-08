@@ -1,10 +1,10 @@
-import { Button, Link, makeStyles, MenuItem, Typography } from '@material-ui/core';
-import Menu from '@material-ui/core/Menu';
+import React, { useState, useRef, useCallback } from 'react';
+import { makeStyles, Typography, Button, MenuItem, Link } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React, { useCallback, useRef, useState } from 'react';
-import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
 import { useAppState } from '../../../state';
 import UserAvatar from './UserAvatar/UserAvatar';
+import Menu from '@material-ui/core/Menu';
+import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
 
 const useStyles = makeStyles({
   userContainer: {
@@ -52,10 +52,7 @@ const UserMenu: React.FC = () => {
     return (
       <div className={classes.userContainer}>
         <UserAvatar user={user} />
-        <Button
-          onClick={() => setMenuOpen(isOpen => !isOpen)}
-          ref={anchorRef}
-          className={classes.userButton}>
+        <Button onClick={() => setMenuOpen(isOpen => !isOpen)} ref={anchorRef} className={classes.userButton}>
           {user!.displayName}
           <ExpandMoreIcon />
         </Button>
@@ -71,9 +68,10 @@ const UserMenu: React.FC = () => {
           transformOrigin={{
             vertical: 'top',
             horizontal: 'center',
-          }}>
+          }}
+        >
           <MenuItem onClick={handleSignOut}>
-            <Typography variant='body1'>Logout</Typography>
+            <Typography variant="body1">Logout</Typography>
           </MenuItem>
         </Menu>
       </div>

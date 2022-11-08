@@ -1,3 +1,5 @@
+import React, { useCallback, useState } from 'react';
+
 import {
   Button,
   Checkbox,
@@ -16,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import React, { useCallback, useState } from 'react';
 import useTownController from '../../hooks/useTownController';
 
 function TownSettings(): JSX.Element {
