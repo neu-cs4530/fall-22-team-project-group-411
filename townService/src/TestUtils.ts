@@ -112,7 +112,7 @@ export function extractSessionToken(player: MockedPlayer): string {
  * @throws Error if no handler was registered
  */
 export function getEventListener<
-  Ev extends ReservedOrUserEventNames<SocketReservedEventsMap, ClientToServerEvents>
+  Ev extends ReservedOrUserEventNames<SocketReservedEventsMap, ClientToServerEvents>,
 >(
   mockSocket: MockProxy<CoveyTownSocket>,
   eventName: Ev,
@@ -121,7 +121,7 @@ export function getEventListener<
   if (ret) {
     const param = ret[1];
     if (param) {
-      return (param as unknown) as ReservedOrUserListener<
+      return param as unknown as ReservedOrUserListener<
         SocketReservedEventsMap,
         ClientToServerEvents,
         Ev
