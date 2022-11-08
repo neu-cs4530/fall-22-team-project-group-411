@@ -1,24 +1,31 @@
-import React, { useState, useRef } from 'react';
-import AboutDialog from '../../AboutDialog/AboutDialog';
-import BackgroundIcon from '../../../icons/BackgroundIcon';
-import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDialog';
+import {
+  Button,
+  Menu as MenuContainer,
+  MenuItem,
+  styled,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import InfoIconOutlined from '../../../icons/InfoIconOutlined';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import StartRecordingIcon from '../../../icons/StartRecordingIcon';
-import StopRecordingIcon from '../../../icons/StopRecordingIcon';
 import SearchIcon from '@material-ui/icons/Search';
-import SettingsIcon from '../../../icons/SettingsIcon';
-import { Button, styled, Theme, useMediaQuery, Menu as MenuContainer, MenuItem, Typography } from '@material-ui/core';
 import { isSupported } from '@twilio/video-processors';
-
-import { useAppState } from '../../../state';
+import { VideoRoomMonitor } from '@twilio/video-room-monitor';
+import React, { useRef, useState } from 'react';
 import useChatContext from '../../../hooks/useChatContext/useChatContext';
+import useFlipCameraToggle from '../../../hooks/useFlipCameraToggle/useFlipCameraToggle';
 import useIsRecording from '../../../hooks/useIsRecording/useIsRecording';
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import BackgroundIcon from '../../../icons/BackgroundIcon';
 import FlipCameraIcon from '../../../icons/FlipCameraIcon';
-import useFlipCameraToggle from '../../../hooks/useFlipCameraToggle/useFlipCameraToggle';
-import { VideoRoomMonitor } from '@twilio/video-room-monitor';
+import InfoIconOutlined from '../../../icons/InfoIconOutlined';
+import SettingsIcon from '../../../icons/SettingsIcon';
+import StartRecordingIcon from '../../../icons/StartRecordingIcon';
+import StopRecordingIcon from '../../../icons/StopRecordingIcon';
+import { useAppState } from '../../../state';
+import AboutDialog from '../../AboutDialog/AboutDialog';
+import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDialog';
 
 export const IconContainer = styled('div')({
   display: 'flex',
@@ -48,8 +55,7 @@ export default function Menu(props: { buttonClassName?: string }) {
         onClick={() => setMenuOpen(isOpen => !isOpen)}
         ref={anchorRef}
         className={props.buttonClassName}
-        data-cy-more-button
-      >
+        data-cy-more-button>
         {isMobile ? (
           <MoreIcon />
         ) : (
@@ -70,13 +76,12 @@ export default function Menu(props: { buttonClassName?: string }) {
         transformOrigin={{
           vertical: isMobile ? -55 : 'bottom',
           horizontal: 'center',
-        }}
-      >
+        }}>
         <MenuItem onClick={() => setSettingsOpen(true)}>
           <IconContainer>
             <SettingsIcon />
           </IconContainer>
-          <Typography variant="body1">Audio and Video Settings</Typography>
+          <Typography variant='body1'>Audio and Video Settings</Typography>
         </MenuItem>
 
         {isSupported && (
@@ -85,12 +90,11 @@ export default function Menu(props: { buttonClassName?: string }) {
               setIsBackgroundSelectionOpen(true);
               setIsChatWindowOpen(false);
               setMenuOpen(false);
-            }}
-          >
+            }}>
             <IconContainer>
               <BackgroundIcon />
             </IconContainer>
-            <Typography variant="body1">Backgrounds</Typography>
+            <Typography variant='body1'>Backgrounds</Typography>
           </MenuItem>
         )}
 
@@ -99,7 +103,7 @@ export default function Menu(props: { buttonClassName?: string }) {
             <IconContainer>
               <FlipCameraIcon />
             </IconContainer>
-            <Typography variant="body1">Flip Camera</Typography>
+            <Typography variant='body1'>Flip Camera</Typography>
           </MenuItem>
         )}
 
@@ -114,10 +118,11 @@ export default function Menu(props: { buttonClassName?: string }) {
                 updateRecordingRules(room!.sid, [{ type: 'include', all: true }]);
               }
             }}
-            data-cy-recording-button
-          >
-            <IconContainer>{isRecording ? <StopRecordingIcon /> : <StartRecordingIcon />}</IconContainer>
-            <Typography variant="body1">{isRecording ? 'Stop' : 'Start'} Recording</Typography>
+            data-cy-recording-button>
+            <IconContainer>
+              {isRecording ? <StopRecordingIcon /> : <StartRecordingIcon />}
+            </IconContainer>
+            <Typography variant='body1'>{isRecording ? 'Stop' : 'Start'} Recording</Typography>
           </MenuItem>
         )}
 
@@ -125,19 +130,18 @@ export default function Menu(props: { buttonClassName?: string }) {
           onClick={() => {
             VideoRoomMonitor.toggleMonitor();
             setMenuOpen(false);
-          }}
-        >
+          }}>
           <IconContainer>
             <SearchIcon style={{ fill: '#707578', width: '0.9em' }} />
           </IconContainer>
-          <Typography variant="body1">Room Monitor</Typography>
+          <Typography variant='body1'>Room Monitor</Typography>
         </MenuItem>
 
         <MenuItem onClick={() => setAboutOpen(true)}>
           <IconContainer>
             <InfoIconOutlined />
           </IconContainer>
-          <Typography variant="body1">About</Typography>
+          <Typography variant='body1'>About</Typography>
         </MenuItem>
       </MenuContainer>
       <AboutDialog
