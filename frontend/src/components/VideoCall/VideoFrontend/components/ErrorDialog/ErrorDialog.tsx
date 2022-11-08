@@ -1,12 +1,12 @@
-import React, { PropsWithChildren } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import enhanceMessage from './enhanceMessage';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { PropsWithChildren } from 'react';
 import { TwilioError } from 'twilio-video';
+import enhanceMessage from './enhanceMessage';
 
 interface ErrorDialogProps {
   dismissError: Function;
@@ -18,7 +18,7 @@ function ErrorDialog({ dismissError, error }: PropsWithChildren<ErrorDialogProps
   const enhancedMessage = enhanceMessage(message, code);
 
   return (
-    <Dialog open={error !== null} onClose={() => dismissError()} fullWidth={true} maxWidth="xs">
+    <Dialog open={error !== null} onClose={() => dismissError()} fullWidth={true} maxWidth='xs'>
       <DialogTitle>ERROR</DialogTitle>
       <DialogContent>
         <DialogContentText>{enhancedMessage}</DialogContentText>
@@ -29,7 +29,7 @@ function ErrorDialog({ dismissError, error }: PropsWithChildren<ErrorDialogProps
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => dismissError()} color="primary" autoFocus>
+        <Button onClick={() => dismissError()} color='primary' autoFocus>
           OK
         </Button>
       </DialogActions>

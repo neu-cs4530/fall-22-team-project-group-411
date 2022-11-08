@@ -1,10 +1,10 @@
-import React from 'react';
-import AvatarIcon from '../../../../icons/AvatarIcon';
 import { makeStyles, Theme, Typography } from '@material-ui/core';
-import LocalAudioLevelIndicator from '../../../LocalAudioLevelIndicator/LocalAudioLevelIndicator';
+import React from 'react';
 import { LocalVideoTrack } from 'twilio-video';
-import VideoTrack from '../../../VideoTrack/VideoTrack';
 import useVideoContext from '../../../../hooks/useVideoContext/useVideoContext';
+import AvatarIcon from '../../../../icons/AvatarIcon';
+import LocalAudioLevelIndicator from '../../../LocalAudioLevelIndicator/LocalAudioLevelIndicator';
+import VideoTrack from '../../../VideoTrack/VideoTrack';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -58,7 +58,7 @@ export default function LocalVideoPreview({ identity }: { identity: string }) {
   const { localTracks } = useVideoContext();
 
   const videoTrack = localTracks.find(
-    track => !track.name.includes('screen') && track.kind === 'video'
+    track => !track.name.includes('screen') && track.kind === 'video',
   ) as LocalVideoTrack;
 
   return (
@@ -76,7 +76,7 @@ export default function LocalVideoPreview({ identity }: { identity: string }) {
       <div className={classes.identityContainer}>
         <span className={classes.identity}>
           <LocalAudioLevelIndicator />
-          <Typography variant="body1" color="inherit" component="span">
+          <Typography variant='body1' color='inherit' component='span'>
             {identity}
           </Typography>
         </span>

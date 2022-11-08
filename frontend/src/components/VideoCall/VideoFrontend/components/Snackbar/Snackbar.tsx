@@ -1,11 +1,11 @@
-import React from 'react';
-import clsx from 'clsx';
-import CloseIcon from '@material-ui/icons/Close';
-import ErrorIcon from '../../icons/ErrorIcon';
 import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
 import MUISnackbar from '@material-ui/core/Snackbar';
-import WarningIcon from '../../icons/WarningIcon';
+import CloseIcon from '@material-ui/icons/Close';
+import clsx from 'clsx';
+import React from 'react';
+import ErrorIcon from '../../icons/ErrorIcon';
 import InfoIcon from '../../icons/InfoIcon';
+import WarningIcon from '../../icons/WarningIcon';
 
 interface SnackbarProps {
   headline: string;
@@ -71,15 +71,13 @@ export default function Snackbar({ headline, message, variant, open, handleClose
       }}
       open={open}
       onClose={handleOnClose}
-      autoHideDuration={10000}
-    >
+      autoHideDuration={10000}>
       <div
         className={clsx(classes.container, {
           [classes.error]: variant === 'error',
           [classes.warning]: variant === 'warning',
           [classes.info]: variant === 'info',
-        })}
-      >
+        })}>
         <div className={classes.contentContainer}>
           <div className={classes.iconContainer}>
             {variant === 'warning' && <WarningIcon />}
@@ -87,10 +85,10 @@ export default function Snackbar({ headline, message, variant, open, handleClose
             {variant === 'info' && <InfoIcon />}
           </div>
           <div>
-            <Typography variant="body1" className={classes.headline} component="span">
+            <Typography variant='body1' className={classes.headline} component='span'>
               {headline}
             </Typography>
-            <Typography variant="body1" component="span">
+            <Typography variant='body1' component='span'>
               {' '}
               {message}
             </Typography>
@@ -98,8 +96,8 @@ export default function Snackbar({ headline, message, variant, open, handleClose
         </div>
         <div>
           {handleClose && (
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
+            <IconButton size='small' aria-label='close' color='inherit' onClick={handleClose}>
+              <CloseIcon fontSize='small' />
             </IconButton>
           )}
         </div>

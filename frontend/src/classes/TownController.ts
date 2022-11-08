@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import TypedEmitter from 'typed-emitter';
 import Interactable from '../components/Town/Interactable';
+import StreamingArea from '../components/Town/interactables/StreamingArea';
 import ViewingArea from '../components/Town/interactables/ViewingArea';
 import { LoginController } from '../contexts/LoginControllerContext';
 import { TownsService, TownsServiceClient } from '../generated/client';
@@ -13,12 +14,14 @@ import {
   ChatMessage,
   CoveyTownSocket,
   PlayerLocation,
+  StreamingArea as StreamingAreaModel,
   TownSettingsUpdate,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
-import { isConversationArea, isViewingArea } from '../types/TypeUtils';
+import { isConversationArea, isStreamingArea, isViewingArea } from '../types/TypeUtils';
 import ConversationAreaController from './ConversationAreaController';
 import PlayerController from './PlayerController';
+import StreamingAreaController from './StreamingAreaController';
 import ViewingAreaController from './ViewingAreaController';
 
 const CALCULATE_NEARBY_PLAYERS_DELAY = 300;
@@ -69,6 +72,11 @@ export type TownEvents = {
    * the town controller's record of viewing areas.
    */
   viewingAreasChanged: (newViewingAreas: ViewingAreaController[]) => void;
+  /**
+   * An event that indicates that the set of streaming areas has changed. This event is emitted after
+   * updating the town controller's record of streaming areas.
+   */
+  streamingAreasChanged: (newStreamingAreas: StreamingAreaController[]) => void;
   /**
    * An event that indicates that a new chat message has been received, which is the parameter passed to the listener
    */
@@ -190,6 +198,11 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
   private _viewingAreas: ViewingAreaController[] = [];
 
+  /**
+   * The current list of streaming areas in the town.
+   */
+  private _streamingAreas: StreamingAreaController[] = [];
+
   public constructor({ userName, townID, loginController }: ConnectionProperties) {
     super();
     this._townID = townID;
@@ -309,6 +322,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
     this.emit('viewingAreasChanged', newViewingAreas);
   }
 
+  public get streamingAreas() {
+    return this._streamingAreas;
+  }
+
+  public set streamingAreas(newStreamingAreas: StreamingAreaController[]) {
+    this._streamingAreas = newStreamingAreas;
+    this.emit('streamingAreasChanged', newStreamingAreas);
+  }
+
   /**
    * Begin interacting with an interactable object. Emits an event to all listeners.
    * @param interactedObj
@@ -408,7 +430,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * a conversationAreasChagned event to listeners of this TownController.
      *
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
-     * events (@see ViewingAreaController and @see ConversationAreaController)
+     * events (@see ViewingAreaController and @see ConversationAreaController and @see StreamingAreaController)
      */
     this._socket.on('interactableUpdate', interactable => {
       if (isConversationArea(interactable)) {
@@ -427,6 +449,11 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
           eachArea => eachArea.id === interactable.id,
         );
         updatedViewingArea?.updateFrom(interactable);
+      } else if (isStreamingArea(interactable)) {
+        const updatedStreamingArea = this._streamingAreas.find(
+          eachArea => eachArea.id === interactable.id,
+        );
+        updatedStreamingArea?.updateFrom(interactable);
       }
     });
   }
@@ -509,6 +536,17 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
   }
 
   /**
+   * Create a new streaming area, sending the request to the townService. Throws an error if the request
+   * is not successful. Does not immediately update local state about the new streaming area - it will
+   * be updated once the townService creates the area and emits an interactableUpdate.
+   *
+   * @param newArea
+   */
+  async createStreamingArea(newArea: StreamingAreaModel) {
+    await this._townsService.createStreamingArea(this.townID, this.sessionToken, newArea);
+  }
+
+  /**
    * Disconnect from the town, notifying the townService that we are leaving and returning
    * to the login page
    */
@@ -540,6 +578,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
 
         this._conversationAreas = [];
         this._viewingAreas = [];
+        this._streamingAreas = [];
         initialData.interactables.forEach(eachInteractable => {
           if (isConversationArea(eachInteractable)) {
             this._conversationAreasInternal.push(
@@ -550,6 +589,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
             );
           } else if (isViewingArea(eachInteractable)) {
             this._viewingAreas.push(new ViewingAreaController(eachInteractable));
+          } else if (isStreamingArea(eachInteractable)) {
+            this._streamingAreas.push(new StreamingAreaController(eachInteractable));
           }
         });
         this._userID = initialData.userID;
@@ -561,6 +602,28 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         reject(new Error('Invalid town ID'));
       });
     });
+  }
+
+  /**
+   * Retrieve the streaming area controller that corresponds to a streamingAreaModel, creating one if necessary
+   *
+   * @param streamingArea
+   * @returns
+   */
+  public getStreamingAreaController(streamingArea: StreamingArea): StreamingAreaController {
+    const existingController = this._streamingAreas.find(
+      eachExistingArea => eachExistingArea.id === streamingArea.id,
+    );
+    if (existingController) {
+      return existingController;
+    } else {
+      const newController = new StreamingAreaController({
+        id: streamingArea.id,
+        stream: streamingArea.defaultStream,
+      });
+      this._streamingAreas.push(newController);
+      return newController;
+    }
   }
 
   /**
@@ -594,6 +657,15 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
    */
   public emitViewingAreaUpdate(viewingArea: ViewingAreaController) {
     this._socket.emit('interactableUpdate', viewingArea.viewingAreaModel());
+  }
+
+  /**
+   * Emit a streaming area update to the townService
+   * @param streamingArea The Streaming Area Controller that is updated and should be emitted
+   *    with the event
+   */
+  public emitStreamingAreaUpdate(streamingArea: StreamingAreaController) {
+    this._socket.emit('interactableUpdate', streamingArea.streamingAreaModel());
   }
 
   /**
