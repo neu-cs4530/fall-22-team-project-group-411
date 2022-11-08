@@ -1,7 +1,11 @@
-import { makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { makeStyles, Theme, Typography } from '@material-ui/core';
 import Swoosh from './swoosh';
+import VideoLogo from './VideoLogo';
+import TwilioLogo from './TwilioLogo';
+import { useAppState } from '../../state';
+import UserMenu from './UserMenu/UserMenu';
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => ({
   background: {
@@ -46,10 +50,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '210px',
     textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
-      'display': 'flex',
-      'alignItems': 'center',
-      'width': '90%',
-      'textAlign': 'initial',
+      display: 'flex',
+      alignItems: 'center',
+      width: '90%',
+      textAlign: 'initial',
       '& svg': {
         height: '64px',
       },
@@ -93,8 +97,8 @@ const IntroContainer = (props: IntroContainerProps) => {
       <div className={classes.container}>
         <div className={classes.innerContainer}>
           <div className={classes.content}>{props.children}</div>
-        </div>
-      </div>
+            </div>
+          </div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import useChatContext from '../../../hooks/useChatContext/useChatContext';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CloseIcon from '../../../icons/CloseIcon';
+
+import useChatContext from '../../../hooks/useChatContext/useChatContext';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -24,7 +25,7 @@ const useStyles = makeStyles(() =>
       border: '0',
       padding: '0.4em',
     },
-  }),
+  })
 );
 
 export default function ChatWindowHeader() {

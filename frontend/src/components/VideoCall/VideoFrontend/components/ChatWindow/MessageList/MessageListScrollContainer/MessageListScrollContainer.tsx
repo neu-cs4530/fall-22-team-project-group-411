@@ -1,10 +1,10 @@
 /* istanbul ignore file */
-import Button from '@material-ui/core/Button';
-import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import React from 'react';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import throttle from 'lodash.throttle';
-import React from 'react';
+import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { ChatMessage } from '../../../../../../../types/CoveyTownSocket';
 
 const styles = createStyles({
@@ -81,10 +81,7 @@ export class MessageListScrollContainer extends React.Component<
   }
 
   // This component updates as users send new messages:
-  componentDidUpdate(
-    prevProps: MessageListScrollContainerProps,
-    prevState: MessageListScrollContainerState,
-  ) {
+  componentDidUpdate(prevProps: MessageListScrollContainerProps, prevState: MessageListScrollContainerState) {
     const hasNewMessages = this.props.messages.length !== prevProps.messages.length;
 
     if (prevState.isScrolledToBottom && hasNewMessages) {
@@ -116,9 +113,7 @@ export class MessageListScrollContainer extends React.Component<
     // "isScrolledToBottom" calculation.
     const isScrolledToBottom =
       Math.abs(
-        innerScrollContainerEl.clientHeight +
-          innerScrollContainerEl.scrollTop -
-          innerScrollContainerEl!.scrollHeight,
+        innerScrollContainerEl.clientHeight + innerScrollContainerEl.scrollTop - innerScrollContainerEl!.scrollHeight
       ) < 1;
 
     this.setState(prevState => ({
@@ -130,10 +125,7 @@ export class MessageListScrollContainer extends React.Component<
   handleClick = () => {
     const innerScrollContainerEl = this.chatThreadRef.current!;
 
-    innerScrollContainerEl.scrollTo({
-      top: innerScrollContainerEl.scrollHeight,
-      behavior: 'smooth',
-    });
+    innerScrollContainerEl.scrollTo({ top: innerScrollContainerEl.scrollHeight, behavior: 'smooth' });
 
     this.setState({ showButton: false });
   };
@@ -149,19 +141,17 @@ export class MessageListScrollContainer extends React.Component<
 
     return (
       <div className={classes.outerContainer}>
-        <div
-          className={classes.innerScrollContainer}
-          ref={this.chatThreadRef}
-          data-cy-message-list-inner-scroll>
+        <div className={classes.innerScrollContainer} ref={this.chatThreadRef} data-cy-message-list-inner-scroll>
           <div className={classes.messageListContainer}>
             {this.props.children}
             <Button
               className={clsx(classes.button, { [classes.showButton]: this.state.showButton })}
               onClick={this.handleClick}
               startIcon={<ArrowDownwardIcon />}
-              color='primary'
-              variant='contained'
-              data-cy-new-message-button>
+              color="primary"
+              variant="contained"
+              data-cy-new-message-button
+            >
               {this.state.messageNotificationCount} new message
               {this.state.messageNotificationCount > 1 && 's'}
             </Button>

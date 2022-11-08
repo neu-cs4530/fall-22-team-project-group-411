@@ -1,5 +1,5 @@
-import assert from 'assert';
 import { useContext } from 'react';
+import assert from 'assert';
 import TownController from '../classes/TownController';
 import TownControllerContext from '../contexts/TownControllerContext';
 

@@ -1,4 +1,9 @@
 import React from 'react';
+import useTrack from '../../hooks/useTrack/useTrack';
+import AudioTrack from '../AudioTrack/AudioTrack';
+import VideoTrack from '../VideoTrack/VideoTrack';
+
+import { IVideoTrack } from '../../types';
 import {
   AudioTrack as IAudioTrack,
   LocalTrackPublication,
@@ -6,10 +11,6 @@ import {
   RemoteTrackPublication,
   Track,
 } from 'twilio-video';
-import useTrack from '../../hooks/useTrack/useTrack';
-import { IVideoTrack } from '../../types';
-import AudioTrack from '../AudioTrack/AudioTrack';
-import VideoTrack from '../VideoTrack/VideoTrack';
 
 interface PublicationProps {
   publication: LocalTrackPublication | RemoteTrackPublication;
@@ -19,12 +20,7 @@ interface PublicationProps {
   videoPriority?: Track.Priority | null;
 }
 
-export default function Publication({
-  publication,
-  isLocalParticipant,
-  videoOnly,
-  videoPriority,
-}: PublicationProps) {
+export default function Publication({ publication, isLocalParticipant, videoOnly, videoPriority }: PublicationProps) {
   const track = useTrack(publication);
 
   if (!track) return null;

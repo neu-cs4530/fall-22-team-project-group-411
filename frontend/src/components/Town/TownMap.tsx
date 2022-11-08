@@ -1,5 +1,6 @@
+import React from 'react';
 import Phaser from 'phaser';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import useTownController from '../../hooks/useTownController';
 import SocialSidebar from '../SocialSidebar/SocialSidebar';
 import NewConversationModal from './interactables/NewCoversationModal';
@@ -29,6 +30,7 @@ export default function TownMap(): JSX.Element {
         },
       },
     };
+    console.log('CTC changed');
 
     const game = new Phaser.Game(config);
     const newGameScene = new TownGameScene(coveyTownController);
