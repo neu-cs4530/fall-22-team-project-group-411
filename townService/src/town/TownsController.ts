@@ -13,16 +13,15 @@ import {
   Route,
   Tags,
 } from 'tsoa';
-
 import { Town, TownCreateParams, TownCreateResponse } from '../api/Model';
 import InvalidParametersError from '../lib/InvalidParametersError';
 import CoveyTownsStore from '../lib/TownsStore';
 import {
   ConversationArea,
   CoveyTownSocket,
+  StreamingArea,
   TownSettingsUpdate,
   ViewingArea,
-  StreamingArea,
 } from '../types/CoveyTownSocket';
 
 /**

@@ -1,12 +1,18 @@
-import { LocalVideoTrack } from 'twilio-video';
 import { useCallback, useState } from 'react';
+import { LocalVideoTrack } from 'twilio-video';
 import useVideoContext from '../useVideoContext/useVideoContext';
 
 export default function useLocalVideoToggle() {
-  const { room, localTracks, getLocalVideoTrack, removeLocalVideoTrack, onError } = useVideoContext();
+  const {
+    room,
+    localTracks,
+    getLocalVideoTrack,
+    removeLocalVideoTrack,
+    onError,
+  } = useVideoContext();
   const localParticipant = room?.localParticipant;
   const videoTrack = localTracks.find(
-    track => !track.name.includes('screen') && track.kind === 'video'
+    track => !track.name.includes('screen') && track.kind === 'video',
   ) as LocalVideoTrack;
   const [isPublishing, setIspublishing] = useState(false);
 
@@ -20,14 +26,23 @@ export default function useLocalVideoToggle() {
       } else {
         setIspublishing(true);
         getLocalVideoTrack()
-          .then((track: LocalVideoTrack) => localParticipant?.publishTrack(track, { priority: 'low' }))
+          .then((track: LocalVideoTrack) =>
+            localParticipant?.publishTrack(track, { priority: 'low' }),
+          )
           .catch(onError)
           .finally(() => {
             setIspublishing(false);
           });
       }
     }
-  }, [videoTrack, localParticipant, getLocalVideoTrack, isPublishing, onError, removeLocalVideoTrack]);
+  }, [
+    videoTrack,
+    localParticipant,
+    getLocalVideoTrack,
+    isPublishing,
+    onError,
+    removeLocalVideoTrack,
+  ]);
 
   return [!!videoTrack, toggleVideoEnabled] as const;
 }

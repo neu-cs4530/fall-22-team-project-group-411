@@ -1,6 +1,5 @@
-import React from 'react';
 import Phaser from 'phaser';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import useTownController from '../../hooks/useTownController';
 import SocialSidebar from '../SocialSidebar/SocialSidebar';
 import NewConversationModal from './interactables/NewCoversationModal';

@@ -1,7 +1,6 @@
-import { BroadcastOperator } from 'socket.io';
-
 import { mock, mockDeep, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
+import { BroadcastOperator } from 'socket.io';
 import { SocketReservedEventsMap } from 'socket.io/dist/socket';
 import {
   EventNames,
@@ -21,8 +20,8 @@ import {
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
-  ViewingArea,
   StreamingArea,
+  ViewingArea,
 } from './types/CoveyTownSocket';
 
 /**
@@ -113,7 +112,7 @@ export function extractSessionToken(player: MockedPlayer): string {
  * @throws Error if no handler was registered
  */
 export function getEventListener<
-  Ev extends ReservedOrUserEventNames<SocketReservedEventsMap, ClientToServerEvents>,
+  Ev extends ReservedOrUserEventNames<SocketReservedEventsMap, ClientToServerEvents>
 >(
   mockSocket: MockProxy<CoveyTownSocket>,
   eventName: Ev,
@@ -122,7 +121,7 @@ export function getEventListener<
   if (ret) {
     const param = ret[1];
     if (param) {
-      return param as unknown as ReservedOrUserListener<
+      return (param as unknown) as ReservedOrUserListener<
         SocketReservedEventsMap,
         ClientToServerEvents,
         Ev

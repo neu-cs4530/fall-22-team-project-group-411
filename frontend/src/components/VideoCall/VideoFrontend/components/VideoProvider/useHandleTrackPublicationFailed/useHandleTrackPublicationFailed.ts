@@ -1,6 +1,5 @@
-import { Room } from 'twilio-video';
 import { useEffect } from 'react';
-
+import { Room } from 'twilio-video';
 import { Callback } from '../../../types';
 
 export default function useHandleTrackPublicationFailed(room: Room | null, onError: Callback) {

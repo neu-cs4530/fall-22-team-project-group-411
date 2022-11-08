@@ -13,8 +13,8 @@ import {
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
-  ViewingArea as ViewingAreaModel,
   StreamingArea as StreamingAreaModel,
+  ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
