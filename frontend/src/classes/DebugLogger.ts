@@ -3,7 +3,10 @@
 export default class DebugLogger {
   private enabled = false;
 
-  constructor(private prefix: string) {}
+  constructor(
+    private prefix: string,
+  ) {
+  }
 
   enable(): void {
     this.enabled = true;

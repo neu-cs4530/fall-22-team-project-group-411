@@ -1,15 +1,16 @@
-import { makeStyles, Theme, useMediaQuery } from '@material-ui/core';
+import React, { useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import MenuContainer from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import React, { useRef, useState } from 'react';
-import SettingsIcon from '../../../../icons/SettingsIcon';
-import { useAppState } from '../../../../state';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, Theme, useMediaQuery } from '@material-ui/core';
+
 import AboutDialog from '../../../AboutDialog/AboutDialog';
 import ConnectionOptionsDialog from '../../../ConnectionOptionsDialog/ConnectionOptionsDialog';
 import DeviceSelectionDialog from '../../../DeviceSelectionDialog/DeviceSelectionDialog';
+import SettingsIcon from '../../../../icons/SettingsIcon';
+import { useAppState } from '../../../../state';
 
 const useStyles = makeStyles({
   settingsButton: {
@@ -35,7 +36,8 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
           ref={anchorRef}
           onClick={() => setMenuOpen(true)}
           startIcon={<MoreIcon />}
-          className={mobileButtonClass}>
+          className={mobileButtonClass}
+        >
           More
         </Button>
       ) : (
@@ -43,7 +45,8 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
           ref={anchorRef}
           onClick={() => setMenuOpen(true)}
           startIcon={<SettingsIcon />}
-          className={classes.settingsButton}>
+          className={classes.settingsButton}
+        >
           Settings
         </Button>
       )}
@@ -59,16 +62,17 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
         transformOrigin={{
           vertical: 0,
           horizontal: 'center',
-        }}>
+        }}
+      >
         <MenuItem onClick={() => setAboutOpen(true)}>
-          <Typography variant='body1'>About</Typography>
+          <Typography variant="body1">About</Typography>
         </MenuItem>
         <MenuItem onClick={() => setDeviceSettingsOpen(true)}>
-          <Typography variant='body1'>Audio and Video Settings</Typography>
+          <Typography variant="body1">Audio and Video Settings</Typography>
         </MenuItem>
         {roomType !== 'peer-to-peer' && roomType !== 'go' && (
           <MenuItem onClick={() => setConnectionSettingsOpen(true)}>
-            <Typography variant='body1'>Connection Settings</Typography>
+            <Typography variant="body1">Connection Settings</Typography>
           </MenuItem>
         )}
       </MenuContainer>

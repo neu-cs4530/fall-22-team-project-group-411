@@ -13,12 +13,10 @@ import {
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
-  StreamingArea as StreamingAreaModel,
   ViewingArea as ViewingAreaModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import InteractableArea from './InteractableArea';
-import StreamingArea from './StreamingArea';
 import ViewingArea from './ViewingArea';
 
 /**
@@ -286,36 +284,6 @@ export default class Town {
   }
 
   /**
-   * Creates a new streaming area in this town if there is not currently an active
-   * streaming area with the same ID. The streaming area ID must match the name of a
-   * streaming area that exists in this town's map, and the streaming area must not
-   * already have a stream set.
-   *
-   * If successful creating the streaming area, this method:
-   *    Adds any players who are in the region defined by the streaming area to it
-   *    Notifies all players in the town that the streaming area has been updated by
-   *      emitting an interactableUpdate event
-   *
-   * @param streamingArea Information describing the streaming area to create.
-   *
-   * @returns True if the streaming area was created or false if there is no known
-   * streaming area with the specified ID or if there is already an active streaming area
-   * with the specified ID or if there is no stream specified
-   */
-  public addStreamingArea(streamingArea: StreamingAreaModel): boolean {
-    const area = this._interactables.find(
-      eachArea => eachArea.id === streamingArea.id,
-    ) as StreamingArea;
-    if (!area || !streamingArea.stream || area.stream) {
-      return false;
-    }
-    area.updateModel(streamingArea);
-    area.addPlayersWithinBounds(this._players);
-    this._broadcastEmitter.emit('interactableUpdate', area.toModel());
-    return true;
-  }
-
-  /**
    * Fetch a player's session based on the provided session token. Returns undefined if the
    * session token is not valid.
    *
@@ -384,16 +352,7 @@ export default class Town {
         ConversationArea.fromMapObject(eachConvAreaObj, this._broadcastEmitter),
       );
 
-    const streamingAreas = objectLayer.objects
-      .filter(eachObject => eachObject.type === 'StreamingArea')
-      .map(eachStreamAreaObj =>
-        StreamingArea.fromMapObject(eachStreamAreaObj, this._broadcastEmitter),
-      );
-
-    this._interactables = this._interactables
-      .concat(viewingAreas)
-      .concat(conversationAreas)
-      .concat(streamingAreas);
+    this._interactables = this._interactables.concat(viewingAreas).concat(conversationAreas);
     this._validateInteractables();
   }
 

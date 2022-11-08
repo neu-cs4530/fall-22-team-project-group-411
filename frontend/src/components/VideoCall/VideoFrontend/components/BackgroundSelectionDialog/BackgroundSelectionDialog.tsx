@@ -1,10 +1,10 @@
-import Drawer from '@material-ui/core/Drawer';
-import { makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
-import { backgroundConfig } from '../VideoProvider/useBackgroundSettings/useBackgroundSettings';
 import BackgroundSelectionHeader from './BackgroundSelectionHeader/BackgroundSelectionHeader';
 import BackgroundThumbnail from './BackgroundThumbnail/BackgroundThumbnail';
+import Drawer from '@material-ui/core/Drawer';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { backgroundConfig } from '../VideoProvider/useBackgroundSettings/useBackgroundSettings';
+import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
@@ -29,13 +29,14 @@ function BackgroundSelectionDialog() {
 
   return (
     <Drawer
-      variant='persistent'
-      anchor='right'
+      variant="persistent"
+      anchor="right"
       open={isBackgroundSelectionOpen}
       transitionDuration={0}
       classes={{
         paper: classes.drawer,
-      }}>
+      }}
+    >
       <BackgroundSelectionHeader onClose={() => setIsBackgroundSelectionOpen(false)} />
       <div className={classes.thumbnailContainer}>
         <BackgroundThumbnail thumbnail={'none'} name={'None'} />

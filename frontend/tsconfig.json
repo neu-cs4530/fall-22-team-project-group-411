@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["jest"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+	  "types": ["jest"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,8 +23,11 @@
     "strictNullChecks": true,
     "jsx": "react-jsx",
     "rootDirs": ["./src/", "./generated/"],
-    "alwaysStrict": true /* Parse in strict mode and emit "use strict" for each source file. */
+    "alwaysStrict": true /* Parse in strict mode and emit "use strict" for each source file. */,
   },
-  "include": ["src", "generated"],
-  "references": [{ "path": "../shared/" }]
+  "include": [
+    "src",
+    "generated"
+  ],
+  "references": [{"path": "../shared/"}]
 }

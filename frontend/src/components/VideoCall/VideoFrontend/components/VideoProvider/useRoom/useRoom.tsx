@@ -1,17 +1,13 @@
-import { VideoRoomMonitor } from '@twilio/video-room-monitor';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Video, { ConnectOptions, LocalTrack, Room } from 'twilio-video';
 import { Callback } from '../../../types';
 import { isMobile } from '../../../utils';
+import Video, { ConnectOptions, LocalTrack, Room } from 'twilio-video';
+import { VideoRoomMonitor } from '@twilio/video-room-monitor';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // @ts-ignore
 window.TwilioVideo = Video;
 
-export default function useRoom(
-  localTracks: LocalTrack[],
-  onError: Callback,
-  options?: ConnectOptions,
-) {
+export default function useRoom(localTracks: LocalTrack[], onError: Callback, options?: ConnectOptions) {
   const [room, setRoom] = useState<Room | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const optionsRef = useRef(options);
@@ -52,7 +48,7 @@ export default function useRoom(
             // All video tracks are published with 'low' priority because the video track
             // that is displayed in the 'MainParticipant' component will have it's priority
             // set to 'high' via track.setPriority()
-            publication.setPriority('low'),
+            publication.setPriority('low')
           );
 
           setIsConnecting(false);
@@ -68,10 +64,10 @@ export default function useRoom(
         error => {
           onError(error);
           setIsConnecting(false);
-        },
+        }
       );
     },
-    [localTracks, onError],
+    [localTracks, onError]
   );
 
   return { room, isConnecting, connect };
