@@ -1,4 +1,4 @@
-import { ConversationArea, Interactable, ViewingArea, StreamingArea } from './CoveyTownSocket';
+import { ConversationArea, Interactable, StreamingArea, ViewingArea } from './CoveyTownSocket';
 
 /**
  * Test to see if an interactable is a conversation area

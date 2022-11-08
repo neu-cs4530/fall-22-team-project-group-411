@@ -15,9 +15,9 @@ import {
   ChatMessage,
   Interactable,
   PlayerLocation,
+  StreamingArea as StreamingAreaModel,
   TownEmitter,
   ViewingArea as ViewingAreaModel,
-  StreamingArea as StreamingAreaModel,
 } from '../types/CoveyTownSocket';
 import ConversationArea from './ConversationArea';
 import Town from './Town';

@@ -2,24 +2,24 @@ import assert from 'assert';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import { Town } from '../api/Model';
-import {
-  ConversationArea,
-  Interactable,
-  TownEmitter,
-  ViewingArea,
-  StreamingArea,
-} from '../types/CoveyTownSocket';
 import TownsStore from '../lib/TownsStore';
 import {
   createConversationForTesting,
-  getLastEmittedEvent,
   extractSessionToken,
-  mockPlayer,
-  isViewingArea,
+  getLastEmittedEvent,
   isConversationArea,
   isStreamingArea,
+  isViewingArea,
   MockedPlayer,
+  mockPlayer,
 } from '../TestUtils';
+import {
+  ConversationArea,
+  Interactable,
+  StreamingArea,
+  TownEmitter,
+  ViewingArea,
+} from '../types/CoveyTownSocket';
 import { TownsController } from './TownsController';
 
 type TestTownData = {

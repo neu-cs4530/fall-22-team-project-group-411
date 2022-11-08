@@ -2,8 +2,8 @@ import { ITiledMapObject } from '@jonbell/tiled-map-type-guard';
 import Player from '../lib/Player';
 import {
   BoundingBox,
-  TownEmitter,
   StreamingArea as StreamingAreaModel,
+  TownEmitter,
 } from '../types/CoveyTownSocket';
 import InteractableArea from './InteractableArea';
 
