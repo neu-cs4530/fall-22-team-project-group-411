@@ -15,10 +15,12 @@ import {
   Player as PlayerModel,
   PlayerLocation,
   ServerToClientEvents,
+  StreamingArea,
   TownJoinResponse,
 } from '../types/CoveyTownSocket';
-import { isConversationArea, isViewingArea } from '../types/TypeUtils';
+import { isConversationArea, isStreamingArea, isViewingArea } from '../types/TypeUtils';
 import PlayerController from './PlayerController';
+import StreamingAreaController from './StreamingAreaController';
 import TownController, { TownEvents } from './TownController';
 import ViewingAreaController from './ViewingAreaController';
 
@@ -400,6 +402,44 @@ describe('TownController', () => {
           viewingArea.video = nanoid();
           eventListener(viewingArea);
           expect(listener).toBeCalledWith(viewingArea.video);
+        });
+      });
+      describe('Streaming Area updates', () => {
+        function streamingAreaOnTown() {
+          return {
+            ...(townJoinResponse.interactables.find(eachInteractable =>
+              isStreamingArea(eachInteractable),
+            ) as StreamingArea),
+          };
+        }
+        let streamingArea: StreamingArea;
+        let streamingAreaController: StreamingAreaController;
+        let eventListener: (update: StreamingArea) => void;
+        beforeEach(() => {
+          streamingArea = streamingAreaOnTown();
+          const controller = testController.streamingAreas.find(
+            eachArea => eachArea.id === streamingArea.id,
+          );
+          if (!controller) {
+            fail(`Could not find streaming area controller for streaming area ${streamingArea.id}`);
+          }
+          streamingAreaController = controller;
+          eventListener = getEventListener(mockSocket, 'interactableUpdate');
+        });
+        it('Updates the viewing area model', () => {
+          streamingArea.stream = nanoid();
+
+          eventListener(streamingArea);
+
+          expect(streamingAreaController.streamingAreaModel()).toEqual(streamingArea);
+        });
+        it('Emits a streamChange event if the video changes', () => {
+          const listener = jest.fn();
+          streamingAreaController.addListener('streamChange', listener);
+
+          streamingArea.stream = nanoid();
+          eventListener(streamingArea);
+          expect(listener).toBeCalledWith(streamingArea.stream);
         });
       });
     });

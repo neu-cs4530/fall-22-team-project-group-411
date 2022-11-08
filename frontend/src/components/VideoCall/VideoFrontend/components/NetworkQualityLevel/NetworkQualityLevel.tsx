@@ -1,5 +1,5 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { Participant } from 'twilio-video';
 import useParticipantNetworkQualityLevel from '../../hooks/useParticipantNetworkQualityLevel/useParticipantNetworkQualityLevel';
 
@@ -14,11 +14,11 @@ const useStyles = makeStyles({
     background: 'rgba(0, 0, 0, 0.5)',
   },
   innerContainer: {
-    display: 'flex',
-    alignItems: 'flex-end',
+    'display': 'flex',
+    'alignItems': 'flex-end',
     '& div': {
-      width: '2px',
-      marginRight: '1px',
+      'width': '2px',
+      'marginRight': '1px',
       '&:not(:last-child)': {
         borderRight: 'none',
       },

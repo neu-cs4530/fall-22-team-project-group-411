@@ -1,7 +1,6 @@
-import { BroadcastOperator } from 'socket.io';
-
 import { mock, mockDeep, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
+import { BroadcastOperator } from 'socket.io';
 import { SocketReservedEventsMap } from 'socket.io/dist/socket';
 import {
   EventNames,
@@ -21,6 +20,7 @@ import {
   PlayerLocation,
   ServerToClientEvents,
   SocketData,
+  StreamingArea,
   ViewingArea,
 } from './types/CoveyTownSocket';
 
@@ -201,4 +201,8 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 
 export function isConversationArea(interactable: Interactable): interactable is ConversationArea {
   return 'topic' in interactable;
+}
+
+export function isStreamingArea(interactable: Interactable): interactable is StreamingArea {
+  return 'stream' in interactable;
 }

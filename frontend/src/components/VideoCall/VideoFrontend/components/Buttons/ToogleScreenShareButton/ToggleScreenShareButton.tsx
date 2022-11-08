@@ -1,12 +1,10 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
 import Button from '@material-ui/core/Button';
-import ScreenShareIcon from '../../../icons/ScreenShareIcon';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import React from 'react';
 import useScreenShareParticipant from '../../../hooks/useScreenShareParticipant/useScreenShareParticipant';
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import ScreenShareIcon from '../../../icons/ScreenShareIcon';
 
 export const SCREEN_SHARE_TEXT = 'Share Screen';
 export const STOP_SCREEN_SHARE_TEXT = 'Stop Sharing Screen';
@@ -17,13 +15,13 @@ const useStyles = makeStyles(() =>
   createStyles({
     button: {
       '&[disabled]': {
-        color: '#bbb',
+        'color': '#bbb',
         '& svg *': {
           fill: '#bbb',
         },
       },
     },
-  })
+  }),
 );
 
 export default function ToggleScreenShareButton(props: { disabled?: boolean }) {
@@ -47,10 +45,9 @@ export default function ToggleScreenShareButton(props: { disabled?: boolean }) {
   return (
     <Tooltip
       title={tooltipMessage}
-      placement="top"
+      placement='top'
       PopperProps={{ disablePortal: true }}
-      style={{ cursor: isDisabled ? 'not-allowed' : 'pointer' }}
-    >
+      style={{ cursor: isDisabled ? 'not-allowed' : 'pointer' }}>
       <span>
         {/* The span element is needed because a disabled button will not emit hover events and we want to display
           a tooltip when screen sharing is disabled */}
@@ -59,8 +56,7 @@ export default function ToggleScreenShareButton(props: { disabled?: boolean }) {
           onClick={toggleScreenShare}
           disabled={isDisabled}
           startIcon={<ScreenShareIcon />}
-          data-cy-share-screen
-        >
+          data-cy-share-screen>
           {SCREEN_SHARE_TEXT}
         </Button>
       </span>

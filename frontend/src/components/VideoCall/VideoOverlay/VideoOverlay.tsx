@@ -1,21 +1,19 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from 'react';
 import { styled, Theme } from '@material-ui/core/styles';
-
-import { Room as TwilioRoom } from 'twilio-video';
-
+import React, { useEffect, useRef, useState } from 'react';
 import { Prompt } from 'react-router-dom';
-import Room from '../VideoFrontend/components/Room/Room';
+import { Room as TwilioRoom } from 'twilio-video';
+import useTownController from '../../../hooks/useTownController';
 import MenuBar from '../VideoFrontend/components/MenuBar/MenuBar';
 import MobileTopMenuBar from '../VideoFrontend/components/MobileTopMenuBar/MobileTopMenuBar';
-import ReconnectingNotification from '../VideoFrontend/components/ReconnectingNotification/ReconnectingNotification';
-import useRoomState from '../VideoFrontend/hooks/useRoomState/useRoomState';
-import useLocalAudioToggle from '../VideoFrontend/hooks/useLocalAudioToggle/useLocalAudioToggle';
-import useVideoContext from '../VideoFrontend/hooks/useVideoContext/useVideoContext';
-import useLocalVideoToggle from '../VideoFrontend/hooks/useLocalVideoToggle/useLocalVideoToggle';
-import './VideoGrid.scss';
 import MediaErrorSnackbar from '../VideoFrontend/components/PreJoinScreens/MediaErrorSnackbar/MediaErrorSnackbar';
-import useTownController from '../../../hooks/useTownController';
+import ReconnectingNotification from '../VideoFrontend/components/ReconnectingNotification/ReconnectingNotification';
+import Room from '../VideoFrontend/components/Room/Room';
+import useLocalAudioToggle from '../VideoFrontend/hooks/useLocalAudioToggle/useLocalAudioToggle';
+import useLocalVideoToggle from '../VideoFrontend/hooks/useLocalVideoToggle/useLocalVideoToggle';
+import useRoomState from '../VideoFrontend/hooks/useRoomState/useRoomState';
+import useVideoContext from '../VideoFrontend/hooks/useVideoContext/useVideoContext';
+import './VideoGrid.scss';
 
 const Container = styled('div')({
   // display: 'grid',
@@ -55,13 +53,13 @@ export default function VideoGrid(props: Props) {
   useEffect(() => {
     function stop() {
       try {
-        if(isAudioEnabled){
+        if (isAudioEnabled) {
           toggleAudioEnabled();
         }
       } catch {}
 
       try {
-        if(isVideoEnabled){
+        if (isVideoEnabled) {
           toggleVideoEnabled();
         }
       } catch {}
@@ -76,32 +74,36 @@ export default function VideoGrid(props: Props) {
     unmountRef.current = () => {
       stop();
     };
-    unloadRef.current = (ev) => {
+    unloadRef.current = ev => {
       ev.preventDefault();
       stop();
     };
   }, [room, roomState, isVideoEnabled, isAudioEnabled, toggleAudioEnabled, toggleVideoEnabled]);
 
-  useEffect(() => () => {
-    if (unmountRef && unmountRef.current) {
-      unmountRef.current();
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (unmountRef && unmountRef.current) {
+        unmountRef.current();
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (unloadRef && unloadRef.current) {
       window.addEventListener('beforeunload', unloadRef.current);
     }
     return () => {
-      if (unloadRef && unloadRef.current) window.removeEventListener('beforeunload', unloadRef.current);
+      if (unloadRef && unloadRef.current)
+        window.removeEventListener('beforeunload', unloadRef.current);
     };
   }, []);
 
   const sid = room?.sid;
   useEffect(() => {
     if (
-      existingRoomRef.current 
-            && (sid !== existingRoomRef.current.sid || coveyRoom !== existingRoomRef.current.sid)
+      existingRoomRef.current &&
+      (sid !== existingRoomRef.current.sid || coveyRoom !== existingRoomRef.current.sid)
     ) {
       if (existingRoomRef.current.state === 'connected') {
         existingRoomRef.current.disconnect();
@@ -112,7 +114,10 @@ export default function VideoGrid(props: Props) {
 
   return (
     <>
-      <Prompt when={roomState !== 'disconnected'} message="Are you sure you want to leave the video room?" />
+      <Prompt
+        when={roomState !== 'disconnected'}
+        message='Are you sure you want to leave the video room?'
+      />
       <Container style={{ height: '100%' }}>
         {roomState === 'disconnected' ? (
           <div>Connecting...</div>
@@ -120,7 +125,7 @@ export default function VideoGrid(props: Props) {
           <Main style={{ paddingBottom: '90px' }}>
             <ReconnectingNotification />
             <MobileTopMenuBar />
-            <Container className="videochat-container">
+            <Container className='videochat-container'>
               <Room />
             </Container>
             <MenuBar />
