@@ -1,5 +1,5 @@
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -11,7 +11,7 @@ const useStyles = makeStyles(() =>
       fontSize: '12px',
       color: '#606B85',
     },
-  })
+  }),
 );
 
 interface MessageInfoProps {

@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef } from 'react';
-import { LogLevels, Track, Room } from 'twilio-video';
+import { useCallback, useRef, useState } from 'react';
+import { LogLevels, Room, Track } from 'twilio-video';
 import { ErrorCallback } from '../../../types';
 
 interface MediaStreamTrackPublishOptions {

@@ -1,5 +1,5 @@
-import { LocalAudioTrack, LocalVideoTrack } from 'twilio-video';
 import { useEffect } from 'react';
+import { LocalAudioTrack, LocalVideoTrack } from 'twilio-video';
 
 /*
  * If a user has published an audio track from an external audio input device and
@@ -10,7 +10,9 @@ import { useEffect } from 'react';
  * default audio device when it detects that the published audio device has been disconnected.
  */
 
-export default function useRestartAudioTrackOnDeviceChange(localTracks: (LocalAudioTrack | LocalVideoTrack)[]) {
+export default function useRestartAudioTrackOnDeviceChange(
+  localTracks: (LocalAudioTrack | LocalVideoTrack)[],
+) {
   const audioTrack = localTracks.find(track => track.kind === 'audio');
 
   useEffect(() => {

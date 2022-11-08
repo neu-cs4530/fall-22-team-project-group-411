@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Snackbar from '../../Snackbar/Snackbar';
 import useDevices from '../../../hooks/useDevices/useDevices';
 import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import Snackbar from '../../Snackbar/Snackbar';
 
 export function getSnackbarContent(hasAudio: boolean, hasVideo: boolean, error?: Error) {
   let headline = '';
@@ -83,7 +83,11 @@ export default function MediaErrorSnackbar({ error }: { error?: Error }) {
     !isAcquiringLocalTracks &&
     (Boolean(error) || !hasAudioInputDevices || !hasVideoInputDevices);
 
-  const { headline, message } = getSnackbarContent(hasAudioInputDevices, hasVideoInputDevices, error);
+  const { headline, message } = getSnackbarContent(
+    hasAudioInputDevices,
+    hasVideoInputDevices,
+    error,
+  );
 
   return (
     <Snackbar
@@ -91,7 +95,7 @@ export default function MediaErrorSnackbar({ error }: { error?: Error }) {
       handleClose={() => setIsSnackbarDismissed(true)}
       headline={headline}
       message={message}
-      variant="warning"
+      variant='warning'
     />
   );
 }

@@ -1,5 +1,5 @@
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CloseIcon from '../../../icons/CloseIcon';
 
 const useStyles = makeStyles(() =>
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() =>
       border: '0',
       padding: '0.4em',
     },
-  })
+  }),
 );
 
 interface BackgroundSelectionHeaderProps {
