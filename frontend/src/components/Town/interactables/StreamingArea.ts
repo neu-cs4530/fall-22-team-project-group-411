@@ -9,7 +9,7 @@ export default class StreamingArea extends Interactable {
 
   public get defaultStream() {
     if (!this._defaultStream) {
-      return 'No URL found';
+      return undefined;
     }
     return this._defaultStream;
   }
@@ -19,14 +19,14 @@ export default class StreamingArea extends Interactable {
     this.setTintFill();
     this.setAlpha(0.3);
 
-    this._defaultStream = 'justinegriffin';
-    // this._labelText = this.scene.add.text(
-    //   this.x - this.displayWidth / 2,
-    //   this.y - this.displayHeight / 2,
-    //   `Press space to watch the ${this.name} video`,
-    //   { color: '#FFFFFF', backgroundColor: '#000000' },
-    // );
-    // this._labelText.setVisible(false);
+    this._defaultStream = this.getData('stream');
+    this._labelText = this.scene.add.text(
+      this.x - this.displayWidth / 2,
+      this.y - this.displayHeight / 2,
+      `Press space to choose a stream`,
+      { color: '#FFFFFF', backgroundColor: '#000000' },
+    );
+    this._labelText.setVisible(false);
     this.townController.getStreamingAreaController(this);
     this.setDepth(-1);
   }
