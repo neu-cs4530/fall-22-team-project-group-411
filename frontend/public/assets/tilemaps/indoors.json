@@ -32675,17 +32675,10 @@
           "y": 1058.66666666667
         },
         {
-          "type": "ViewingArea",
+          "type": "StreamingArea",
           "height": 123.333333333333,
           "id": 35,
           "name": "Fish tank",
-          "properties": [
-            {
-              "name": "video",
-              "type": "string",
-              "value": "https://www.youtube.com/watch?v=l40Ef1dg-6s"
-            }
-          ],
           "rotation": 0,
           "visible": true,
           "width": 141.666666666667,

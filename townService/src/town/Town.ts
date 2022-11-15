@@ -4,7 +4,7 @@ import { BroadcastOperator } from 'socket.io';
 import IVideoClient from '../lib/IVideoClient';
 import Player from '../lib/Player';
 import TwilioVideo from '../lib/TwilioVideo';
-import { isViewingArea } from '../TestUtils';
+import { isStreamingArea, isViewingArea } from '../TestUtils';
 import {
   ChatMessage,
   ConversationArea as ConversationAreaModel,
@@ -148,6 +148,7 @@ export default class Town {
     // corresponds to the interactable being updated. Does not throw an error if
     // the specified viewing area does not exist.
     socket.on('interactableUpdate', (update: Interactable) => {
+      console.log('backend receiving interactableUpdate from frontend.');
       if (isViewingArea(update)) {
         newPlayer.townEmitter.emit('interactableUpdate', update);
         const viewingArea = this._interactables.find(
@@ -155,6 +156,14 @@ export default class Town {
         );
         if (viewingArea) {
           (viewingArea as ViewingArea).updateModel(update);
+        }
+      } else if (isStreamingArea(update)) {
+        newPlayer.townEmitter.emit('interactableUpdate', update);
+        const streamingArea = this._interactables.find(
+          eachInteractable => eachInteractable.id === update.id,
+        );
+        if (streamingArea) {
+          (streamingArea as StreamingArea).updateModel(update);
         }
       }
     });

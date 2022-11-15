@@ -7,6 +7,7 @@ import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
 import Transporter from './interactables/Transporter';
 import ViewingArea from './interactables/ViewingArea';
+import StreamingArea from './interactables/StreamingArea';
 
 // Still not sure what the right type is here... "Interactable" doesn't do it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,6 +18,8 @@ function interactableTypeForObjectType(type: string): any {
     return Transporter;
   } else if (type == 'ViewingArea') {
     return ViewingArea;
+  } else if (type == 'StreamingArea') {
+    return StreamingArea;
   } else {
     throw new Error(`Unknown object type: ${type}`);
   }
@@ -292,6 +295,7 @@ export default class TownGameScene extends Phaser.Scene {
 
   getInteractables(): Interactable[] {
     const typedObjects = this.map.filterObjects('Objects', obj => obj.type);
+    console.log('here');
     const gameObjects = this.map.createFromObjects(
       'Objects',
       typedObjects.map(obj => ({
