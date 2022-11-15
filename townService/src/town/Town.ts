@@ -148,6 +148,7 @@ export default class Town {
     // corresponds to the interactable being updated. Does not throw an error if
     // the specified viewing area does not exist.
     socket.on('interactableUpdate', (update: Interactable) => {
+      console.log('received interactableUpdate');
       if (isViewingArea(update)) {
         newPlayer.townEmitter.emit('interactableUpdate', update);
         const viewingArea = this._interactables.find(

@@ -85,6 +85,7 @@ export default abstract class InteractableArea {
    * @param player Player to remove
    */
   public remove(player: Player): void {
+    console.log('interactable remove');
     this._occupants = this._occupants.filter(eachPlayer => eachPlayer !== player);
     player.location.interactableID = undefined;
     this._townEmitter.emit('playerMoved', player.toPlayerModel());
@@ -151,6 +152,7 @@ export default abstract class InteractableArea {
    * the model for this InteractableArea in that event.
    */
   protected _emitAreaChanged() {
+    console.log('emit area changed');
     this._townEmitter.emit('interactableUpdate', this.toModel());
   }
 

@@ -35,11 +35,14 @@ export default class StreamingArea extends InteractableArea {
    * @param player
    */
   public remove(player: Player): void {
+    console.log('removing from streaming area');
     super.remove(player);
     if (this._occupants.length === 0) {
       this._stream = undefined;
       this._emitAreaChanged();
     }
+    console.log(this._occupants.length);
+    console.log(this._stream);
   }
 
   /**

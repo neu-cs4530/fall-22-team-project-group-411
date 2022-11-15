@@ -32,6 +32,7 @@ export default class ViewingArea extends Interactable {
   }
 
   overlap(): void {
+    console.log('overlap viewing area');
     if (!this._labelText) {
       throw new Error('Should not be able to overlap with this interactable before added to scene');
     }
@@ -42,6 +43,7 @@ export default class ViewingArea extends Interactable {
   }
 
   overlapExit(): void {
+    console.log('overlapExit viewing area');
     this._labelText?.setVisible(false);
     if (this._isInteracting) {
       this.townController.interactableEmitter.emit('endInteraction', this);

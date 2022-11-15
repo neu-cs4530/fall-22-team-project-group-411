@@ -53,6 +53,7 @@ export default class ViewingArea extends InteractableArea {
    * @param player
    */
   public remove(player: Player): void {
+    console.log('removing from viewing area');
     super.remove(player);
     if (this._occupants.length === 0) {
       this._video = undefined;
