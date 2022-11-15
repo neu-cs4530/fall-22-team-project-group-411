@@ -58,6 +58,7 @@ export interface ConversationArea {
 export interface StreamingArea {
   id: string;
   stream?: string;
+  isStream: boolean;
 }
 export interface BoundingBox {
   x: number;

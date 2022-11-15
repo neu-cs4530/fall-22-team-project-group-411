@@ -52,6 +52,7 @@ export default function SelectVideoModal({
       const request: StreamingAreaModel = {
         id: streamingAreaController.id,
         stream,
+        isStream: true,
       };
       try {
         await coveyTownController.createStreamingArea(request);

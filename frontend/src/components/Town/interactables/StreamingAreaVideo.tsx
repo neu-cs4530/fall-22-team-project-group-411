@@ -54,7 +54,6 @@ export function StreamingAreaContainer({
 }): JSX.Element {
   const townController = useTownController();
   const streamingAreaController = useStreamingAreaController(streamingArea.name);
-  console.log(streamingAreaController.streamingAreaModel());
   const [selectIsOpen, setSelectIsOpen] = useState(streamingAreaController.stream === undefined);
   const [streamingAreaURL, setStreamingAreaURL] = useState(streamingAreaController.stream);
   useEffect(() => {
@@ -93,7 +92,6 @@ export function StreamingAreaContainer({
  */
 export default function StreamingAreaWrapper(): JSX.Element {
   const streamingArea = useInteractable<StreamingAreaInteractable>('streamingArea');
-  console.log(streamingArea?.name);
   if (streamingArea) {
     return <StreamingAreaContainer streamingArea={streamingArea} />;
   }

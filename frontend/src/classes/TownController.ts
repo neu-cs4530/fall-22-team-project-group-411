@@ -13,6 +13,7 @@ import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
   CoveyTownSocket,
+  Interactable as InteractableModel,
   PlayerLocation,
   StreamingArea as StreamingAreaModel,
   TownSettingsUpdate,
@@ -432,8 +433,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
      * events (@see ViewingAreaController and @see ConversationAreaController and @see StreamingAreaController)
      */
-    this._socket.on('interactableUpdate', interactable => {
-      console.log('interactableUpdate' + ' ' + interactable.id);
+    this._socket.on('interactableUpdate', (interactable: InteractableModel) => {
       if (isConversationArea(interactable)) {
         const updatedConversationArea = this.conversationAreas.find(c => c.id === interactable.id);
         if (updatedConversationArea) {
@@ -451,6 +451,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isStreamingArea(interactable)) {
+        console.log('frontend receiving interactableUpdate from backend.');
+        console.log(interactable);
         const updatedStreamingArea = this._streamingAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
@@ -621,6 +623,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       const newController = new StreamingAreaController({
         id: streamingArea.id,
         stream: streamingArea.defaultStream,
+        isStream: true,
       });
       this._streamingAreas.push(newController);
       return newController;

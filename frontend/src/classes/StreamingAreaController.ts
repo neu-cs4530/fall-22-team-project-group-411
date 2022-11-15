@@ -38,7 +38,6 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * Or undefined if there is no channel set.
    */
   public get stream() {
-    console.log('getting stream');
     return this._model.stream;
   }
 
@@ -68,7 +67,6 @@ export default class StreamingAreaController extends (EventEmitter as new () => 
    * @param updatedModel the updated model to update this controller with
    */
   public updateFrom(updatedModel: StreamingAreaModel) {
-    console.log('updating model');
     this.stream = updatedModel.stream;
   }
 }

@@ -35,14 +35,11 @@ export default class StreamingArea extends InteractableArea {
    * @param player
    */
   public remove(player: Player): void {
-    console.log('removing from streaming area');
     super.remove(player);
     if (this._occupants.length === 0) {
       this._stream = undefined;
       this._emitAreaChanged();
     }
-    console.log(this._occupants.length);
-    console.log(this._stream);
   }
 
   /**
@@ -62,6 +59,7 @@ export default class StreamingArea extends InteractableArea {
     return {
       id: this.id,
       stream: this.stream,
+      isStream: true,
     };
   }
 
@@ -77,6 +75,6 @@ export default class StreamingArea extends InteractableArea {
       throw new Error(`Malformed viewing area ${name}`);
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
-    return new StreamingArea({ id: name }, rect, townEmitter);
+    return new StreamingArea({ id: name, isStream: true }, rect, townEmitter);
   }
 }
