@@ -26,7 +26,7 @@ export function StreamingAreaVideo({
   controller: StreamingAreaController;
 }): JSX.Element {
   const townController = useTownController();
-
+  console.log(townController);
   return (
     <Container className='participant-wrapper'>
       Streaming Area: {controller.id}
