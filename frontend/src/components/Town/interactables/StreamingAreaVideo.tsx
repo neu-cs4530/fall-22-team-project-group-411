@@ -1,30 +1,24 @@
 import { Container } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { TwitchEmbed } from 'react-twitch-embed';
 import StreamingAreaController from '../../../classes/StreamingAreaController';
 import { useInteractable, useStreamingAreaController } from '../../../classes/TownController';
 import useTownController from '../../../hooks/useTownController';
 import SelectStreamModal from './SelectStreamModal';
 import StreamingAreaInteractable from './StreamingArea';
-import { TwitchEmbed } from 'react-twitch-embed';
 
 /**
  * The StreamingAreaVideo component renders a StreamingArea's stream.
- * The URL property of the ReactPlayer is set to the ViewingAreaController's video property, and the isPlaying
- * property is set, by default, to the controller's isPlaying property.
+ * The URL property of the ReactPlayer is set to the StreamingAreaVideoController's stream property
  *
- * The ViewingAreaVideo subscribes to the ViewingAreaController's events, and responds to
- * playbackChange events by pausing (or resuming) the video playback as appropriate. In response to
- * progressChange events, the ViewingAreaVideo component will seek the video playback to the same timecode.
- * To avoid jittering, the playback is allowed to drift by up to ALLOWED_DRIFT before seeking: the video should
- * not be seek'ed to the newTime from a progressChange event unless the difference between the current time of
- * the video playback exceeds ALLOWED_DRIFT.
+ * The StreamingAreaVideo subscribes to the StreamingAreaVideoController's events
  *
- * The ViewingAreaVideo also subscribes to onProgress, onPause, onPlay, and onEnded events of the ReactPlayer.
- * In response to these events, the ViewingAreaVideo updates the ViewingAreaController's properties, and
- * uses the TownController to emit a viewing area update.
+ * The StreamingAreaVideo also subscribes to onProgress, onPause, onPlay, and onEnded events of the ReactPlayer.
+ * In response to these events, the StreamingAreaVideo updates the StreamingAreaVideoController's properties, and
+ * uses the TownController to emit a streaming area update.
  *
- * @param props: A single property 'controller', which is the ViewingAreaController corresponding to the
- *               current viewing area.
+ * @param props: A single property 'controller', which is the StreamingAreaVideoController corresponding to the
+ *               current streaming area.
  */
 export function StreamingAreaVideo({
   controller,
@@ -53,6 +47,7 @@ export function StreamingAreaContainer({
   streamingArea: StreamingAreaInteractable;
 }): JSX.Element {
   const townController = useTownController();
+  console.log(townController);
   const streamingAreaController = useStreamingAreaController(streamingArea.name);
   const [selectIsOpen, setSelectIsOpen] = useState(streamingAreaController.stream === undefined);
   const [streamingAreaURL, setStreamingAreaURL] = useState(streamingAreaController.stream);

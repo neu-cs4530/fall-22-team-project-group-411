@@ -386,6 +386,9 @@ describe('TownsController integration tests', () => {
           }
         }
       });
+      /**
+       * Testing if the town is able to add and create streaming areas
+       */
       it('Returns an error message if the town ID is invalid', async () => {
         const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
         const newStreamingArea: StreamingArea = {

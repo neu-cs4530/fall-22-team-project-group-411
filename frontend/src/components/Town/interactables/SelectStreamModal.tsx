@@ -18,7 +18,12 @@ import useTownController from '../../../hooks/useTownController';
 import { StreamingArea as StreamingAreaModel } from '../../../types/CoveyTownSocket';
 import StreamingArea from './StreamingArea';
 
+/**
+ * Creating an accessible modal component for React, replicating the video modal
+ * @returns the streamingArea that will be displayed
+ */
 export default function SelectVideoModal({
+  //isOpen indicates whether modal should be displayed
   isOpen,
   close,
   streamingArea,
