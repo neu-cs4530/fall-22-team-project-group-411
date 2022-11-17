@@ -13,8 +13,8 @@ import StreamingAreaInteractable from './StreamingArea';
  *
  * The StreamingAreaVideo subscribes to the StreamingAreaVideoController's events
  *
- * The StreamingAreaVideo also subscribes to onProgress, onPause, onPlay, and onEnded events of the ReactPlayer.
- * In response to these events, the StreamingAreaVideo updates the StreamingAreaVideoController's properties, and
+ * The StreamingAreaVideo subscribes to streamChange events
+ * In response to this event, the StreamingAreaVideo updates the StreamingAreaVideoController's properties, and
  * uses the TownController to emit a streaming area update.
  *
  * @param props: A single property 'controller', which is the StreamingAreaVideoController corresponding to the
@@ -82,8 +82,8 @@ export function StreamingAreaContainer({
 }
 
 /**
- * The ViewingAreaWrapper is suitable to be *always* rendered inside of a town, and
- * will activate only if the player begins interacting with a viewing area.
+ * The StreamingAreaWrapper is suitable to be *always* rendered inside of a town, and
+ * will activate only if the player begins interacting with a streaming area.
  */
 export default function StreamingAreaWrapper(): JSX.Element {
   const streamingArea = useInteractable<StreamingAreaInteractable>('streamingArea');
