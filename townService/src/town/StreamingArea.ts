@@ -59,6 +59,7 @@ export default class StreamingArea extends InteractableArea {
     return {
       id: this.id,
       stream: this.stream,
+      isStream: true,
     };
   }
 
@@ -74,6 +75,6 @@ export default class StreamingArea extends InteractableArea {
       throw new Error(`Malformed viewing area ${name}`);
     }
     const rect: BoundingBox = { x: mapObject.x, y: mapObject.y, width, height };
-    return new StreamingArea({ id: name }, rect, townEmitter);
+    return new StreamingArea({ id: name, isStream: true }, rect, townEmitter);
   }
 }

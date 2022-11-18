@@ -14,6 +14,7 @@ describe('StreamingAreaController', () => {
     testAreaModel = {
       id: nanoid(),
       stream: nanoid(),
+      isStream: true,
     };
     testArea = new StreamingAreaController(testAreaModel);
     mockClear(townController);
@@ -43,6 +44,7 @@ describe('StreamingAreaController', () => {
       const newModel: StreamingArea = {
         id: testAreaModel.id,
         stream: nanoid(),
+        isStream: true,
       };
       testArea.updateFrom(newModel);
       expect(testArea.stream).toEqual(newModel.stream);
@@ -53,6 +55,7 @@ describe('StreamingAreaController', () => {
       const newModel: StreamingArea = {
         id: nanoid(),
         stream: nanoid(),
+        isStream: true,
       };
       testArea.updateFrom(newModel);
       expect(testArea.id).toEqual(existingID);
