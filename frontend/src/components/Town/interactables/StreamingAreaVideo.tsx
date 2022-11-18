@@ -30,7 +30,7 @@ export function StreamingAreaVideo({
   return (
     <Container className='participant-wrapper'>
       Streaming Area: {controller.id}
-      <TwitchEmbed channel={controller.stream} />
+      <TwitchEmbed channel={controller.stream} aria-label='twitch-embed' />
     </Container>
   );
 }
