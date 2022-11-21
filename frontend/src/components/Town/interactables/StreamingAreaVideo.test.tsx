@@ -43,6 +43,7 @@ describe('Testing StreamingAreaVideo', () => {
   describe('Checking the rendering of the StreamingArea', () => {
     it('The streaming area is rendered properly and uses the correct controller for its data', () => {
       const data = renderData.getByText(streamingArea.id, { exact: false });
+      renderData.asFragment();
       expect(data).toBeInTheDocument();
     });
   });

@@ -775,6 +775,31 @@ export function useStreamingAreaController(streamingAreaID: string): StreamingAr
 }
 
 /**
+ * A react hook to retrieve a viewing area controller.
+ *
+ * This function will not throw an error if the viewing area controller does not exist.
+ *
+ * This function will return undefined if the viewing area controller does not exist.
+ *
+ * This hook relies on the TownControllerContext.
+ *
+ * @param viewingAreaID The ID of the viewing area to retrieve the controller for
+ */
+export function useUndefinedStreamingAreaController(
+  streamingAreaID: string,
+): StreamingAreaController | undefined {
+  const townController = useTownController();
+
+  const streamingArea = townController.streamingAreas.find(
+    eachArea => eachArea.id == streamingAreaID,
+  );
+  if (!streamingArea) {
+    return undefined;
+  }
+  return streamingArea;
+}
+
+/**
  * A react hook to retrieve the active conversation areas. This hook will re-render any components
  * that use it when the set of conversation areas changes. It does *not* re-render its dependent components
  * when the state of one of those areas changes - if that is desired, @see useConversationAreaTopic and @see useConversationAreaOccupants
