@@ -10,10 +10,12 @@ import ConversationAreaController, {
   useConversationAreaTopic,
 } from '../classes/ConversationAreaController';
 import PlayerController from '../classes/PlayerController';
+import StreamingAreaController from '../classes/StreamingAreaController';
 import TownController, {
   TownEvents,
   useActiveConversationAreas,
   usePlayers,
+  useStreamingAreaController,
   useTownSettings,
 } from '../classes/TownController';
 import { EventNames, getTownEventListener, mockTownController } from '../TestUtils';
@@ -216,6 +218,35 @@ describe('[T3] TownController-Dependent Hooks', () => {
       expect(getSingleListenerRemoved('conversationAreasChanged')).toBe(addCall);
 
       getSingleListenerAdded('conversationAreasChanged', newController.addListener);
+    });
+  });
+
+  describe('useStreamingArea', () => {
+    const streamingAreas: StreamingAreaController[] = [
+      new StreamingAreaController({ id: 'test1', stream: 'first stream', isStream: true }),
+      new StreamingAreaController({ id: 'test2', stream: 'second stream', isStream: true }),
+    ];
+    let friendlyName: string;
+    let townIsPubliclyListed: boolean;
+    let hookReturnValue: StreamingAreaController;
+    function TestComponent(props: { name: string }) {
+      hookReturnValue = useStreamingAreaController(props.name);
+      return null;
+    }
+    beforeEach(() => {
+      friendlyName = nanoid();
+      townIsPubliclyListed = true;
+      townController = mockTownController({
+        friendlyName,
+        townIsPubliclyListed,
+        streamingAreas,
+      });
+      useTownControllerSpy.mockReturnValue(townController);
+
+      render(<TestComponent name='test2' />);
+    });
+    it('Returns the streaming area controller with the matching id', () => {
+      expect(hookReturnValue.id).toBe('test2');
     });
   });
 

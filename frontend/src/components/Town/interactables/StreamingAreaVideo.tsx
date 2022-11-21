@@ -42,7 +42,7 @@ export function StreamingAreaVideo({
  * The StreamingArea monitors the player's interaction with a StreamingArea on the map: displaying either
  * a popup to set the stream for a stream area, or if the stream is set, a player for the stream.
  *
- * @param props: the streaming area interactable that is being interacted with
+ * @param props: the streaming area controller corresponding to the streaming area
  */
 export function StreamingAreaContainer({
   streamingAreaController,

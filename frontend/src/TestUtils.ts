@@ -3,6 +3,7 @@ import { mock, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import ConversationAreaController from './classes/ConversationAreaController';
 import PlayerController from './classes/PlayerController';
+import StreamingAreaController from './classes/StreamingAreaController';
 import TownController, { TownEvents } from './classes/TownController';
 import ViewingAreaController from './classes/ViewingAreaController';
 import { TownsService } from './generated/client';
@@ -44,9 +45,8 @@ export type ReceivedEventListener<EventName extends ReceivedEvent> = ReservedOrU
  * Due to TS-41778 it is a pain to make this work for reserved events too (e.g. disconnect), so this will only work for our user-defined events,
  * but this is probably OK anyway because those are what we most want to test! https://github.com/microsoft/TypeScript/issues/41778
  */
-export type ReceivedEventParameter<
-  EventName extends EventNames<ServerToClientEvents>
-> = EventParams<ServerToClientEvents, EventName>[0];
+export type ReceivedEventParameter<EventName extends EventNames<ServerToClientEvents>> =
+  EventParams<ServerToClientEvents, EventName>[0];
 
 /**
  * Given a mocked CoveyTownSocket, return the first event listener that was registered for a given event
@@ -86,6 +86,7 @@ type MockedTownControllerProperties = {
   players?: PlayerController[];
   conversationAreas?: ConversationAreaController[];
   viewingAreas?: ViewingAreaController[];
+  streamingAreas?: StreamingAreaController[];
 };
 export function mockTownController({
   friendlyName,
@@ -96,6 +97,7 @@ export function mockTownController({
   players,
   conversationAreas,
   viewingAreas,
+  streamingAreas,
 }: MockedTownControllerProperties) {
   const mockedController = mock<TownController>();
   if (friendlyName) {
@@ -123,6 +125,9 @@ export function mockTownController({
   }
   if (viewingAreas) {
     Object.defineProperty(mockedController, 'viewingAreas', { value: viewingAreas });
+  }
+  if (streamingAreas) {
+    Object.defineProperty(mockedController, 'streamingAreas', { value: streamingAreas });
   }
   return mockedController;
 }
