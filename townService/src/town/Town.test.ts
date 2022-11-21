@@ -478,7 +478,7 @@ describe('Town', () => {
         let secondPlayer: MockedPlayer;
         beforeEach(async () => {
           newArea = {
-            id: 'Name4',
+            id: 'Name3',
             elapsedTimeSec: 0,
             isPlaying: true,
             video: nanoid(),
