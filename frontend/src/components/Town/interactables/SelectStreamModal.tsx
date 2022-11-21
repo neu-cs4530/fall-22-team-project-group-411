@@ -13,6 +13,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
+import StreamingAreaController from '../../../classes/StreamingAreaController';
 import { useStreamingAreaController } from '../../../classes/TownController';
 import useTownController from '../../../hooks/useTownController';
 import { StreamingArea as StreamingAreaModel } from '../../../types/CoveyTownSocket';
@@ -26,16 +27,15 @@ export default function SelectVideoModal({
   //isOpen indicates whether modal should be displayed
   isOpen,
   close,
-  streamingArea,
+  streamingAreaController,
 }: {
   isOpen: boolean;
   close: () => void;
-  streamingArea: StreamingArea;
+  streamingAreaController: StreamingAreaController;
 }): JSX.Element {
   const coveyTownController = useTownController();
-  const streamingAreaController = useStreamingAreaController(streamingArea?.name);
 
-  const [stream, setStream] = useState<string>(streamingArea?.defaultStream || '');
+  const [stream, setStream] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {

@@ -2,7 +2,10 @@ import { Container } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { TwitchEmbed } from 'react-twitch-embed';
 import StreamingAreaController from '../../../classes/StreamingAreaController';
-import { useInteractable, useStreamingAreaController } from '../../../classes/TownController';
+import {
+  useInteractable,
+  useUndefinedStreamingAreaController,
+} from '../../../classes/TownController';
 import useTownController from '../../../hooks/useTownController';
 import SelectStreamModal from './SelectStreamModal';
 import StreamingAreaInteractable from './StreamingArea';
@@ -39,16 +42,14 @@ export function StreamingAreaVideo({
  * The StreamingArea monitors the player's interaction with a StreamingArea on the map: displaying either
  * a popup to set the stream for a stream area, or if the stream is set, a player for the stream.
  *
- * @param props: the streaming area interactable that is being interacted with
+ * @param props: the streaming area controller corresponding to the streaming area
  */
 export function StreamingAreaContainer({
-  streamingArea,
+  streamingAreaController,
 }: {
-  streamingArea: StreamingAreaInteractable;
+  streamingAreaController: StreamingAreaController;
 }): JSX.Element {
   const townController = useTownController();
-  console.log(townController);
-  const streamingAreaController = useStreamingAreaController(streamingArea.name);
   const [selectIsOpen, setSelectIsOpen] = useState(streamingAreaController.stream === undefined);
   const [streamingAreaURL, setStreamingAreaURL] = useState(streamingAreaController.stream);
   useEffect(() => {
@@ -70,7 +71,7 @@ export function StreamingAreaContainer({
       <SelectStreamModal
         isOpen={selectIsOpen}
         close={() => setSelectIsOpen(false)}
-        streamingArea={streamingArea}
+        streamingAreaController={streamingAreaController}
       />
     );
   }
@@ -87,8 +88,10 @@ export function StreamingAreaContainer({
  */
 export default function StreamingAreaWrapper(): JSX.Element {
   const streamingArea = useInteractable<StreamingAreaInteractable>('streamingArea');
-  if (streamingArea) {
-    return <StreamingAreaContainer streamingArea={streamingArea} />;
+  const streamingAreaController: StreamingAreaController | undefined =
+    useUndefinedStreamingAreaController('' + streamingArea?.name);
+  if (streamingArea && streamingAreaController) {
+    return <StreamingAreaContainer streamingAreaController={streamingAreaController} />;
   }
   return <></>;
 }

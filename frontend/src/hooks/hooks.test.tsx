@@ -10,11 +10,14 @@ import ConversationAreaController, {
   useConversationAreaTopic,
 } from '../classes/ConversationAreaController';
 import PlayerController from '../classes/PlayerController';
+import StreamingAreaController from '../classes/StreamingAreaController';
 import TownController, {
   TownEvents,
   useActiveConversationAreas,
   usePlayers,
+  useStreamingAreaController,
   useTownSettings,
+  useUndefinedStreamingAreaController,
 } from '../classes/TownController';
 import { EventNames, getTownEventListener, mockTownController } from '../TestUtils';
 import * as useTownController from './useTownController';
@@ -216,6 +219,49 @@ describe('[T3] TownController-Dependent Hooks', () => {
       expect(getSingleListenerRemoved('conversationAreasChanged')).toBe(addCall);
 
       getSingleListenerAdded('conversationAreasChanged', newController.addListener);
+    });
+  });
+
+  describe('useStreamingArea', () => {
+    const streamingAreas: StreamingAreaController[] = [
+      new StreamingAreaController({ id: 'test1', stream: 'first stream', isStream: true }),
+      new StreamingAreaController({ id: 'test2', stream: 'second stream', isStream: true }),
+    ];
+    let friendlyName: string;
+    let townIsPubliclyListed: boolean;
+    let hookReturnValue: StreamingAreaController;
+    let undefinedHookReturnValue: StreamingAreaController | undefined;
+    function TestComponent(props: { name: string }) {
+      hookReturnValue = useStreamingAreaController(props.name);
+      return null;
+    }
+    function TestComponentUndefinedHook(props: { name: string }) {
+      undefinedHookReturnValue = useUndefinedStreamingAreaController(props.name);
+      return null;
+    }
+    beforeEach(() => {
+      friendlyName = nanoid();
+      townIsPubliclyListed = true;
+      townController = mockTownController({
+        friendlyName,
+        townIsPubliclyListed,
+        streamingAreas,
+      });
+      useTownControllerSpy.mockReturnValue(townController);
+    });
+    it('Returns the streaming area controller with the matching id', () => {
+      render(<TestComponent name='test2' />);
+      expect(hookReturnValue.id).toBe('test2');
+    });
+    describe('useUndefinedStreamingAreaController', () => {
+      it('Returns the streaming area controller with the matching id', () => {
+        render(<TestComponentUndefinedHook name='test2' />);
+        expect(undefinedHookReturnValue?.id).toBe('test2');
+      });
+      it('Returns undefined if there is no controller', () => {
+        render(<TestComponentUndefinedHook name='test56' />);
+        expect(undefinedHookReturnValue).toBeUndefined();
+      });
     });
   });
 
