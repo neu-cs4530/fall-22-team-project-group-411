@@ -453,7 +453,7 @@ describe('Town', () => {
     describe('[T1] interactableUpdate callback', () => {
       let interactableUpdateHandler: (update: Interactable) => void;
       beforeEach(() => {
-        town.initializeFromMap(testingMaps.twoConvTwoViewing);
+        town.initializeFromMap(testingMaps.oneConvOneViewingOneStreaming);
         interactableUpdateHandler = getEventListener(playerTestData.socket, 'interactableUpdate');
       });
       it('Should not throw an error for any interactable area that is not a viewing area', () => {
@@ -461,7 +461,7 @@ describe('Town', () => {
           interactableUpdateHandler({ id: 'Name1', topic: nanoid(), occupantsByID: [] }),
         ).not.toThrowError();
         expect(() =>
-          interactableUpdateHandler({ id: 'Name2', stream: nanoid() }),
+          interactableUpdateHandler({ id: 'Name2', stream: nanoid(), isStream: true }),
         ).not.toThrowError();
       });
       it('Should not throw an error if there is no such viewing area', () => {
@@ -753,20 +753,21 @@ describe('Town', () => {
       town.initializeFromMap(testingMaps.oneConvOneViewingOneStreaming);
     });
     it('Should return false if no area exists with that ID', () => {
-      expect(town.addStreamingArea({ id: nanoid(), stream: nanoid() })).toBe(false);
+      expect(town.addStreamingArea({ id: nanoid(), stream: nanoid(), isStream: true })).toBe(false);
     });
     it('Should return false if the requested stream is empty', () => {
-      expect(town.addStreamingArea({ id: 'Name2', stream: '' })).toBe(false);
-      expect(town.addStreamingArea({ id: 'Name2', stream: undefined })).toBe(false);
+      expect(town.addStreamingArea({ id: 'Name2', stream: '', isStream: true })).toBe(false);
+      expect(town.addStreamingArea({ id: 'Name2', stream: undefined, isStream: true })).toBe(false);
     });
     it('Should return false if the area is already active', () => {
-      expect(town.addStreamingArea({ id: 'Name2', stream: 'test' })).toBe(true);
-      expect(town.addStreamingArea({ id: 'Name2', stream: 'test2' })).toBe(false);
+      expect(town.addStreamingArea({ id: 'Name2', stream: 'test', isStream: true })).toBe(true);
+      expect(town.addStreamingArea({ id: 'Name2', stream: 'test2', isStream: true })).toBe(false);
     });
     describe('When successful', () => {
       const newModel: StreamingAreaModel = {
         id: 'Name2',
         stream: nanoid(),
+        isStream: true,
       };
       beforeEach(() => {
         playerTestData.moveTo(613, 121); // Inside of "Name2" area

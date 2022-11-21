@@ -3,6 +3,7 @@ import { mock, MockProxy } from 'jest-mock-extended';
 import { nanoid } from 'nanoid';
 import ConversationAreaController from './classes/ConversationAreaController';
 import PlayerController from './classes/PlayerController';
+import StreamingAreaController from './classes/StreamingAreaController';
 import TownController, { TownEvents } from './classes/TownController';
 import ViewingAreaController from './classes/ViewingAreaController';
 import { TownsService } from './generated/client';
@@ -62,7 +63,7 @@ export function getEventListener<Ev extends ReceivedEvent>(
   if (ret) {
     const param = ret[1];
     if (param) {
-      return param as unknown as ReservedOrUserListener<
+      return (param as unknown) as ReservedOrUserListener<
         SocketReservedEventsMap,
         ServerToClientEvents,
         Ev
@@ -85,6 +86,7 @@ type MockedTownControllerProperties = {
   players?: PlayerController[];
   conversationAreas?: ConversationAreaController[];
   viewingAreas?: ViewingAreaController[];
+  streamingAreas?: StreamingAreaController[];
 };
 export function mockTownController({
   friendlyName,
@@ -95,6 +97,7 @@ export function mockTownController({
   players,
   conversationAreas,
   viewingAreas,
+  streamingAreas,
 }: MockedTownControllerProperties) {
   const mockedController = mock<TownController>();
   if (friendlyName) {
@@ -122,6 +125,9 @@ export function mockTownController({
   }
   if (viewingAreas) {
     Object.defineProperty(mockedController, 'viewingAreas', { value: viewingAreas });
+  }
+  if (streamingAreas) {
+    Object.defineProperty(mockedController, 'streamingAreas', { value: streamingAreas });
   }
   return mockedController;
 }
@@ -186,6 +192,7 @@ export async function mockTownControllerConnection(
       responseToSendController.interactables.push({
         id: nanoid(),
         stream: nanoid(),
+        isStream: true,
       });
     }
   }
@@ -222,7 +229,7 @@ export function getTownEventListener<Ev extends EventNames<TownEvents>>(
   if (ret) {
     const param = ret[1];
     if (param) {
-      return param as unknown as TownEvents[Ev];
+      return (param as unknown) as TownEvents[Ev];
     }
   }
   throw new Error(`No event listener found for event ${eventName}`);

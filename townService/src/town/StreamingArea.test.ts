@@ -15,7 +15,7 @@ describe('StreamingArea', () => {
 
   beforeEach(() => {
     mockClear(townEmitter);
-    testArea = new StreamingArea({ id, stream }, testAreaBox, townEmitter);
+    testArea = new StreamingArea({ id, stream, isStream: true }, testAreaBox, townEmitter);
     newPlayer = new Player(nanoid(), mock<TownEmitter>());
     testArea.add(newPlayer);
   });
@@ -25,10 +25,11 @@ describe('StreamingArea', () => {
     expect(model).toEqual({
       id,
       stream,
+      isStream: true,
     });
   });
   test('updateModel sets stream', () => {
-    testArea.updateModel({ id: 'ignore', stream: 'test2' });
+    testArea.updateModel({ id: 'ignore', stream: 'test2', isStream: true });
     expect(testArea.id).toBe(id);
     expect(testArea.stream).toBe('test2');
   });
@@ -41,7 +42,7 @@ describe('StreamingArea', () => {
 
       expect(testArea.occupantsByID).toEqual([extraPlayer.id]);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ id, stream });
+      expect(lastEmittedUpdate).toEqual({ id, stream, isStream: true });
     });
     it("Clears the player's location and emits an update for their location", () => {
       testArea.remove(newPlayer);
@@ -52,7 +53,7 @@ describe('StreamingArea', () => {
     it('Clears the stream property when the last occupant leaves', () => {
       testArea.remove(newPlayer);
       const lastEmittedUpdate = getLastEmittedEvent(townEmitter, 'interactableUpdate');
-      expect(lastEmittedUpdate).toEqual({ id, stream: undefined });
+      expect(lastEmittedUpdate).toEqual({ id, stream: undefined, isStream: true });
       expect(testArea.stream).toBeUndefined();
     });
   });

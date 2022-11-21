@@ -13,6 +13,7 @@ import useTownController from '../hooks/useTownController';
 import {
   ChatMessage,
   CoveyTownSocket,
+  Interactable as InteractableModel,
   PlayerLocation,
   StreamingArea as StreamingAreaModel,
   TownSettingsUpdate,
@@ -432,7 +433,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
      * If the update changes properties of the interactable, the interactable is also expected to emit its own
      * events (@see ViewingAreaController and @see ConversationAreaController and @see StreamingAreaController)
      */
-    this._socket.on('interactableUpdate', interactable => {
+    this._socket.on('interactableUpdate', (interactable: InteractableModel) => {
       if (isConversationArea(interactable)) {
         const updatedConversationArea = this.conversationAreas.find(c => c.id === interactable.id);
         if (updatedConversationArea) {
@@ -450,6 +451,8 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isStreamingArea(interactable)) {
+        console.log('frontend receiving interactableUpdate from backend.');
+        console.log(interactable);
         const updatedStreamingArea = this._streamingAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
@@ -620,6 +623,7 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
       const newController = new StreamingAreaController({
         id: streamingArea.id,
         stream: streamingArea.defaultStream,
+        isStream: true,
       });
       this._streamingAreas.push(newController);
       return newController;
@@ -745,6 +749,54 @@ export function useViewingAreaController(viewingAreaID: string): ViewingAreaCont
     throw new Error(`Requested viewing area ${viewingAreaID} does not exist`);
   }
   return viewingArea;
+}
+
+/**
+ * A react hook to retrieve a viewing area controller.
+ *
+ * This function will throw an error if the viewing area controller does not exist.
+ *
+ * This hook relies on the TownControllerContext.
+ *
+ * @param viewingAreaID The ID of the viewing area to retrieve the controller for
+ *
+ * @throws Error if there is no viewing area controller matching the specifeid ID
+ */
+export function useStreamingAreaController(streamingAreaID: string): StreamingAreaController {
+  const townController = useTownController();
+
+  const streamingArea = townController.streamingAreas.find(
+    eachArea => eachArea.id == streamingAreaID,
+  );
+  if (!streamingArea) {
+    throw new Error(`Requested viewing area ${streamingAreaID} does not exist`);
+  }
+  return streamingArea;
+}
+
+/**
+ * A react hook to retrieve a viewing area controller.
+ *
+ * This function will not throw an error if the viewing area controller does not exist.
+ *
+ * This function will return undefined if the viewing area controller does not exist.
+ *
+ * This hook relies on the TownControllerContext.
+ *
+ * @param viewingAreaID The ID of the viewing area to retrieve the controller for
+ */
+export function useUndefinedStreamingAreaController(
+  streamingAreaID: string,
+): StreamingAreaController | undefined {
+  const townController = useTownController();
+
+  const streamingArea = townController.streamingAreas.find(
+    eachArea => eachArea.id == streamingAreaID,
+  );
+  if (!streamingArea) {
+    return undefined;
+  }
+  return streamingArea;
 }
 
 /**

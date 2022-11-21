@@ -373,6 +373,7 @@ describe('TownsController integration tests', () => {
           const newStreamingArea: StreamingArea = {
             id: streamingArea.id,
             stream: nanoid(),
+            isStream: true,
           };
           await controller.createStreamingArea(testingTown.townID, sessionToken, newStreamingArea);
           // Check to see that the viewing area was successfully updated
@@ -385,11 +386,15 @@ describe('TownsController integration tests', () => {
           }
         }
       });
+      /**
+       * Testing if the town is able to add and create streaming areas
+       */
       it('Returns an error message if the town ID is invalid', async () => {
         const streamingArea = interactables.find(isStreamingArea) as StreamingArea;
         const newStreamingArea: StreamingArea = {
           id: streamingArea.id,
           stream: nanoid(),
+          isStream: true,
         };
         await expect(
           controller.createStreamingArea(nanoid(), sessionToken, newStreamingArea),
@@ -401,6 +406,7 @@ describe('TownsController integration tests', () => {
         const newStreamingArea: StreamingArea = {
           id: streamingArea.id,
           stream: nanoid(),
+          isStream: true,
         };
         await expect(
           controller.createStreamingArea(testingTown.townID, invalidSessionToken, newStreamingArea),

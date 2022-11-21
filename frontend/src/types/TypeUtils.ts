@@ -15,5 +15,5 @@ export function isViewingArea(interactable: Interactable): interactable is Viewi
 }
 
 export function isStreamingArea(interactable: Interactable): interactable is StreamingArea {
-  return 'stream' in interactable;
+  return 'isStream' in interactable;
 }
