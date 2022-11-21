@@ -17,6 +17,7 @@ import TownController, {
   usePlayers,
   useStreamingAreaController,
   useTownSettings,
+  useUndefinedStreamingAreaController,
 } from '../classes/TownController';
 import { EventNames, getTownEventListener, mockTownController } from '../TestUtils';
 import * as useTownController from './useTownController';
@@ -229,8 +230,13 @@ describe('[T3] TownController-Dependent Hooks', () => {
     let friendlyName: string;
     let townIsPubliclyListed: boolean;
     let hookReturnValue: StreamingAreaController;
+    let undefinedHookReturnValue: StreamingAreaController | undefined;
     function TestComponent(props: { name: string }) {
       hookReturnValue = useStreamingAreaController(props.name);
+      return null;
+    }
+    function TestComponentUndefinedHook(props: { name: string }) {
+      undefinedHookReturnValue = useUndefinedStreamingAreaController(props.name);
       return null;
     }
     beforeEach(() => {
@@ -242,11 +248,20 @@ describe('[T3] TownController-Dependent Hooks', () => {
         streamingAreas,
       });
       useTownControllerSpy.mockReturnValue(townController);
-
-      render(<TestComponent name='test2' />);
     });
     it('Returns the streaming area controller with the matching id', () => {
+      render(<TestComponent name='test2' />);
       expect(hookReturnValue.id).toBe('test2');
+    });
+    describe('useUndefinedStreamingAreaController', () => {
+      it('Returns the streaming area controller with the matching id', () => {
+        render(<TestComponentUndefinedHook name='test2' />);
+        expect(undefinedHookReturnValue?.id).toBe('test2');
+      });
+      it('Returns undefined if there is no controller', () => {
+        render(<TestComponentUndefinedHook name='test56' />);
+        expect(undefinedHookReturnValue).toBeUndefined();
+      });
     });
   });
 
