@@ -14,10 +14,8 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import StreamingAreaController from '../../../classes/StreamingAreaController';
-import { useStreamingAreaController } from '../../../classes/TownController';
 import useTownController from '../../../hooks/useTownController';
 import { StreamingArea as StreamingAreaModel } from '../../../types/CoveyTownSocket';
-import StreamingArea from './StreamingArea';
 
 /**
  * Creating an accessible modal component for React, replicating the video modal
