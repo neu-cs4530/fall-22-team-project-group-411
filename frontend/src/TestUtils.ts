@@ -63,7 +63,7 @@ export function getEventListener<Ev extends ReceivedEvent>(
   if (ret) {
     const param = ret[1];
     if (param) {
-      return (param as unknown) as ReservedOrUserListener<
+      return param as unknown as ReservedOrUserListener<
         SocketReservedEventsMap,
         ServerToClientEvents,
         Ev
@@ -229,7 +229,7 @@ export function getTownEventListener<Ev extends EventNames<TownEvents>>(
   if (ret) {
     const param = ret[1];
     if (param) {
-      return (param as unknown) as TownEvents[Ev];
+      return param as unknown as TownEvents[Ev];
     }
   }
   throw new Error(`No event listener found for event ${eventName}`);
