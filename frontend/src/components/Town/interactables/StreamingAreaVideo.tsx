@@ -30,10 +30,18 @@ export function StreamingAreaVideo({
 }): JSX.Element {
   const townController = useTownController();
   console.log(townController);
+  const embedStyle = {
+    height: '720px',
+  };
   return (
-    <Container className='participant-wrapper'>
+    <Container className='twitch-wrapper' style={{ maxWidth: '100%' }}>
       Streaming Area: {controller.id}
-      <TwitchEmbed channel={controller.stream} aria-label='twitch-embed' />
+      <TwitchEmbed
+        channel={controller.stream}
+        aria-label='twitch-embed'
+        className='twitch-embed'
+        style={embedStyle}
+      />
     </Container>
   );
 }
