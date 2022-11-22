@@ -62,3 +62,7 @@
   height: 200px;
   width: 400px;
 }
+
+.twitch-wrapper {
+  z-index: 100;
+}
