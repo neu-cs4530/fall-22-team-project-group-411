@@ -21,7 +21,7 @@ import { StreamingArea as StreamingAreaModel } from '../../../types/CoveyTownSoc
  * Creating an accessible modal component for React, replicating the video modal
  * @returns the streamingArea that will be displayed
  */
-export default function SelectVideoModal({
+export default function SelectStreamModal({
   //isOpen indicates whether modal should be displayed
   isOpen,
   close,
