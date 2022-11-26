@@ -1,5 +1,8 @@
 import Interactable, { KnownInteractableTypes } from '../Interactable';
 
+/**
+ * Streaming area component that uses Phaser to interact with the frontend
+ */
 export default class StreamingArea extends Interactable {
   private _labelText?: Phaser.GameObjects.Text;
 
@@ -7,6 +10,9 @@ export default class StreamingArea extends Interactable {
 
   private _isInteracting = false;
 
+  /**
+   * gets the default stream for the current streaming area
+   */
   public get defaultStream() {
     if (!this._defaultStream) {
       return undefined;
@@ -14,6 +20,10 @@ export default class StreamingArea extends Interactable {
     return this._defaultStream;
   }
 
+  /**
+   * adds the streaming area to the scene
+   * implements the frontend component that prompts user to select a stream
+   */
   addedToScene() {
     super.addedToScene();
     this.setTintFill();
@@ -31,6 +41,9 @@ export default class StreamingArea extends Interactable {
     this.setDepth(-1);
   }
 
+  /**
+   * ensures that there is no text or interactable overlapping
+   */
   overlap(): void {
     if (!this._labelText) {
       throw new Error('Should not be able to overlap with this interactable before added to scene');
@@ -41,6 +54,9 @@ export default class StreamingArea extends Interactable {
     this._labelText.setVisible(true);
   }
 
+  /**
+   * exits if the interactable is overlapping with another interactable
+   */
   overlapExit(): void {
     this._labelText?.setVisible(false);
     if (this._isInteracting) {
@@ -49,11 +65,18 @@ export default class StreamingArea extends Interactable {
     }
   }
 
+  /**
+   * checks if a user is interacting with the current interactable
+   */
   interact(): void {
     this._labelText?.setVisible(false);
     this._isInteracting = true;
   }
 
+  /**
+   * returns the type of interactable this object is
+   * @returns a string indiciating that the current interactable is a streaming area
+   */
   getType(): KnownInteractableTypes {
     return 'streamingArea';
   }
