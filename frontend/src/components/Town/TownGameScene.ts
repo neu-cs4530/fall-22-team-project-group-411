@@ -5,9 +5,9 @@ import { PlayerLocation } from '../../types/CoveyTownSocket';
 import { Callback } from '../VideoCall/VideoFrontend/types';
 import Interactable from './Interactable';
 import ConversationArea from './interactables/ConversationArea';
+import StreamingArea from './interactables/StreamingArea';
 import Transporter from './interactables/Transporter';
 import ViewingArea from './interactables/ViewingArea';
-import StreamingArea from './interactables/StreamingArea';
 
 // Still not sure what the right type is here... "Interactable" doesn't do it
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,6 +122,7 @@ export default class TownGameScene extends Phaser.Scene {
       '16_Grocery_store_32x32',
       this._resourcePathPrefix + '/assets/tilesets/16_Grocery_store_32x32.png',
     );
+    this.load.image('twitch logo', this._resourcePathPrefix + '/assets/tilesets/twitch logo.png');
     this.load.tilemapTiledJSON('map', this._resourcePathPrefix + '/assets/tilemaps/indoors.json');
     this.load.atlas(
       'atlas',
@@ -294,12 +295,12 @@ export default class TownGameScene extends Phaser.Scene {
   }
 
   getInteractables(): Interactable[] {
-    const typedObjects = this.map.filterObjects('Objects', obj => obj.type);
+    const typedObjects = this.map.filterObjects('Objects', obj => obj.name);
     const gameObjects = this.map.createFromObjects(
       'Objects',
       typedObjects.map(obj => ({
         id: obj.id,
-        classType: interactableTypeForObjectType(obj.type),
+        classType: interactableTypeForObjectType(obj.name),
       })),
     );
 
@@ -316,6 +317,7 @@ export default class TownGameScene extends Phaser.Scene {
       'Room_Builder_32x32',
       '22_Museum_32x32',
       '5_Classroom_and_library_32x32',
+      'twitch logo',
       '12_Kitchen_32x32',
       '1_Generic_32x32',
       '13_Conference_Hall_32x32',
@@ -347,10 +349,12 @@ export default class TownGameScene extends Phaser.Scene {
 
     // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
     // collision shapes. In the tmx file, there's an object layer with a point named "Spawn Point"
-    const spawnPoint = this.map.findObject(
+    // eslint-disable-next-line prettier/prettier
+    const spawnPoint = (this.map.findObject(
       'Objects',
       obj => obj.name === 'Spawn Point',
-    ) as unknown as Phaser.GameObjects.Components.Transform;
+      // eslint-disable-next-line prettier/prettier
+    ) as unknown) as Phaser.GameObjects.Components.Transform;
 
     const labels = this.map.filterObjects('Objects', obj => obj.name === 'label');
     labels.forEach(label => {
