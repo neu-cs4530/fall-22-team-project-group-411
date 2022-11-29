@@ -451,8 +451,6 @@ export default class TownController extends (EventEmitter as new () => TypedEmit
         );
         updatedViewingArea?.updateFrom(interactable);
       } else if (isStreamingArea(interactable)) {
-        console.log('frontend receiving interactableUpdate from backend.');
-        console.log(interactable);
         const updatedStreamingArea = this._streamingAreas.find(
           eachArea => eachArea.id === interactable.id,
         );
